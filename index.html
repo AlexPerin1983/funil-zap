@@ -10,245 +10,304 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #f4f4f9; font-family: 'Helvetica Neue', sans-serif; font-size: 16px; color: #333; }
-        
-        .header {
-            background: #ffffff;
-            padding: 20px;
-            width: 100%;
-            z-index: 10;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .scroll-container {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            padding: 20px;
-            gap: 15px;
-            margin-top: 100px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-        
-        .scroll-container::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .message-card {
-            flex: 0 0 240px;
-            height: 120px;
-            background: linear-gradient(135deg, #007b83, #004d40);
-            border-radius: 15px;
-            padding: 20px;
-            color: white;
-            cursor: pointer;
-            scroll-snap-align: start;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        .message-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .message-list {
-            background: #ffffff;
-            margin: 20px;
-            padding: 25px;
-            border-radius: 20px;
-            min-height: 400px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
+        * { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
 
-        .back-btn {
-            background: #004d40;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            border: none;
-            transition: background 0.3s;
-            margin-bottom: 20px;
-        }
+body { 
+    background: #f4f4f9; 
+    font-family: 'Helvetica Neue', sans-serif; 
+    font-size: 16px; 
+    color: #333; 
+}
 
-        .back-btn:hover {
-            background: #00362f;
-        }
-        
-        .message-item {
-            background: #f8f9fa;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: box-shadow 0.3s ease;
-        }
-        
-        .message-item:hover {
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
+.header {
+    background: #ffffff;
+    padding: 20px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
 
-        .message-preview {
-            font-size: 14px;
-            color: #555;
-            margin-top: 10px;
-            line-height: 1.4;
-            max-height: 60px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+.scroll-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 20px;
+    gap: 15px;
+    margin-top: 100px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
 
-        .input {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-        
-        .input:focus {
-            box-shadow: 0 0 8px rgba(0, 184, 148, 0.6);
-        }
-        
-        .btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-            margin-right: 10px;
-            transition: background 0.3s, transform 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-        
-        .btn-copy { background: #007965; }
-        .btn-copy:hover { background: #006953; transform: scale(1.05); }
-        
-        .btn-whats { background: #25D366; }
-        .btn-whats:hover { background: #1c9c50; transform: scale(1.05); }
+.scroll-container::-webkit-scrollbar {
+    display: none;
+}
 
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #25D366;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            opacity: 0;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            font-size: 14px;
-        }
+.message-card {
+    flex: 0 0 160px;
+    min-height: 100px;
+    background: linear-gradient(135deg, #007b83, #004d40);
+    border-radius: 15px;
+    padding: 16px;
+    color: white;
+    cursor: pointer;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
 
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(-10px);
-        }
+.message-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
 
-        .scroll-to-top {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            background: #007965;
-            color: white;
-            padding: 15px;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: background 0.3s, box-shadow 0.3s;
-        }
+.message-list {
+    background: #ffffff;
+    margin: 20px;
+    padding: 25px;
+    border-radius: 20px;
+    min-height: 400px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
 
-        .scroll-to-top:hover {
-            background: #006953;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
+.back-btn {
+    background: #004d40;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: background 0.3s;
+    margin-bottom: 20px;
+}
 
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-        }
-        
-        .modal-content {
-            background: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 500px;
-            height: 90%;
-            max-height: 90vh;
-            font-size: 16px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
+.back-btn:hover {
+    background: #00362f;
+}
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #ccc;
-        }
+.message-item {
+    background: #f8f9fa;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+}
 
-        .modal-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #004d40;
-        }
+.message-item:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
 
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #004d40;
-        }
+.message-preview {
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
+    line-height: 1.4;
+    max-height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-        .modal-close:hover {
-            color: #00362f;
-        }
+.input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
 
-        .modal-body {
-            flex: 1;
-            overflow-y: auto;
-            margin-top: 20px;
-        }
+.input:focus {
+    box-shadow: 0 0 8px rgba(0, 184, 148, 0.6);
+}
 
-        .button-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            padding: 15px;
-            border-top: 1px solid #ccc;
-            background: #f8f9fa;
-        }
+.btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background 0.3s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.btn-copy { 
+    background: #007965; 
+}
+
+.btn-copy:hover { 
+    background: #006953; 
+    transform: scale(1.05); 
+}
+
+.btn-whats { 
+    background: #25D366; 
+}
+
+.btn-whats:hover { 
+    background: #1c9c50; 
+    transform: scale(1.05); 
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #25D366;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    font-size: 14px;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px);
+}
+
+.scroll-to-top {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background: #007965;
+    color: white;
+    padding: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.scroll-to-top:hover {
+    background: #006953;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 500px;
+    height: 90%;
+    max-height: 90vh;
+    font-size: 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ccc;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #004d40;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #004d40;
+}
+
+.modal-close:hover {
+    color: #00362f;
+}
+
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 20px;
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding: 15px;
+    border-top: 1px solid #ccc;
+    background: #f8f9fa;
+}
+
+/* Ajustes específicos do card */
+.message-card h3 {
+    font-size: 16px;
+    margin: 0;
+    font-weight: 500;
+}
+
+.message-card div:first-of-type {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.message-card div:last-child {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .header {
+        padding: 15px;
+    }
+    
+    .message-card {
+        flex: 0 0 140px;
+        padding: 12px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        height: 95vh;
+    }
+}
     </style>
 </head>
 <body>
@@ -1038,44 +1097,69 @@ categoriesObjectStore.add({
             };
 
             const saveEditedMessage = () => {
-                const { categoryId, messageIndex, text } = modalContent;
+    const { categoryId, messageIndex, text } = modalContent;
+    
+    const request = indexedDB.open("MessagesDB", 1);
+    request.onsuccess = (event) => {
+        const db = event.target.result;
+        const transaction = db.transaction("categories", "readwrite");
+        const objectStore = transaction.objectStore("categories");
+        const getCategoryRequest = objectStore.get(categoryId);
+
+        getCategoryRequest.onsuccess = () => {
+            const category = getCategoryRequest.result;
+            category.messages[messageIndex].text = text;
+            const updateRequest = objectStore.put(category);
+
+            updateRequest.onsuccess = () => {
+                // Atualiza o estado de forma imutável
                 setCategories(prevCategories => {
-                    const updatedCategories = { ...prevCategories };
-                    updatedCategories[categoryId].messages[messageIndex].text = text;
+                    const updatedCategories = prevCategories.map(cat => {
+                        if (cat.id === categoryId) {
+                            return {
+                                ...cat,
+                                messages: cat.messages.map((msg, idx) => 
+                                    idx === messageIndex ? { ...msg, text } : msg
+                                )
+                            };
+                        }
+                        return cat;
+                    });
                     return updatedCategories;
                 });
 
-                const request = indexedDB.open("MessagesDB", 1);
-                request.onsuccess = (event) => {
-                    const db = event.target.result;
-                    const transaction = db.transaction("categories", "readwrite");
-                    const objectStore = transaction.objectStore("categories");
-                    const getCategoryRequest = objectStore.get(categoryId);
-
-                    getCategoryRequest.onsuccess = () => {
-                        const category = getCategoryRequest.result;
-                        category.messages[messageIndex].text = text;
-                        const updateRequest = objectStore.put(category);
-
-                        updateRequest.onsuccess = () => {
-                            console.log("Mensagem atualizada com sucesso no IndexedDB");
-                            showToast("Mensagem salva com sucesso!");
+                // Atualiza a categoria selecionada
+                setSelectedCategory(prev => {
+                    if (prev.id === categoryId) {
+                        const updatedMessages = [...prev.messages];
+                        updatedMessages[messageIndex] = {
+                            ...updatedMessages[messageIndex],
+                            text
                         };
-
-                        updateRequest.onerror = () => {
-                            console.error("Erro ao atualizar a mensagem no IndexedDB");
-                            showToast("Erro ao salvar a mensagem.", true);
+                        return {
+                            ...prev,
+                            messages: updatedMessages
                         };
-                    };
-                };
+                    }
+                    return prev;
+                });
 
-                request.onerror = () => {
-                    console.error("Erro ao abrir o IndexedDB");
-                    showToast("Erro ao abrir o banco de dados.", true);
-                };
-
+                showToast("Mensagem salva com sucesso!");
                 setIsModalOpen(false);
             };
+
+            updateRequest.onerror = () => {
+                console.error("Erro ao atualizar a mensagem no IndexedDB");
+                showToast("Erro ao salvar a mensagem.", true);
+            };
+        };
+    };
+
+    request.onerror = () => {
+        console.error("Erro ao abrir o IndexedDB");
+        showToast("Erro ao abrir o banco de dados.", true);
+    };
+};
 
             const showToast = (message, isError = false) => {
                 const toast = document.getElementById('toast');
