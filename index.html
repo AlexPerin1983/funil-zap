@@ -1,1250 +1,1439 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Metadados -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp Messages</title>
-    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>Aplicação Profissional de Mensagens</title>
+
+    <!-- Bibliotecas e Fontes -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="styles.css"> <!-- Aqui vai o CSS que te passei antes -->
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <!-- Fonte Roboto -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
 
-
+    <!-- Estilos Personalizados -->
     <style>
-        /* Reset e Estilos Base */
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
+        /* Reset e Estilos Básicos */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        
-        body { 
-            background: #f4f4f9; 
-            font-family: 'Helvetica Neue', sans-serif; 
-            font-size: 16px; 
-            color: #333; 
+
+        html, body {
+            height: 100%;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
         }
-        
+
         /* Header */
         .header {
-            background: #ffffff;
-            padding: 20px;
-            width: 100%;
+            background-color: #fff;
+            padding: 15px 20px;
             position: fixed;
+            width: 100%;
             top: 0;
-            left: 0;
-            z-index: 10;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
-            gap: 10px;
             align-items: center;
+            justify-content: space-between;
         }
-        
-        /* Container de Rolagem */
-        .scroll-container {
+
+        .header .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #007bff;
+        }
+
+        .header .menu-toggle {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Menu Horizontal para Mobile */
+        .mobile-menu {
+            display: none;
+            background-color: #fff;
+            position: fixed;
+            top: 60px;
+            width: 100%;
+            left: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 999;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
             display: flex;
             overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            padding: 20px;
-            gap: 15px;
-            margin-top: 100px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
         }
-        
-        .scroll-container::-webkit-scrollbar {
-            display: none;
+
+        .mobile-menu ul li {
+            flex: none;
         }
-        
-        /* Cards de Mensagem */
-        .message-card {
-            flex: 0 0 160px;
-            min-height: 100px;
-            background: linear-gradient(135deg, #007b83, #004d40);
-            border-radius: 15px;
-            padding: 16px;
-            color: white;
-            cursor: pointer;
-            scroll-snap-align: start;
+
+        .mobile-menu ul li a {
+            display: block;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: #333;
+            white-space: nowrap;
+            font-size: 16px;
+        }
+
+        .mobile-menu ul li a:hover {
+            background-color: #f4f6f9;
+        }
+
+        /* Container Principal */
+        .container-main {
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin-top: 80px;
+            height: calc(100% - 80px);
         }
-        
-        .message-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        /* Lista de Mensagens */
-        .message-list {
-            background: #ffffff;
-            margin: 20px;
-            padding: 25px;
-            border-radius: 20px;
-            min-height: 400px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-        
-        .scroll-container + .message-list {
-            margin-top: 20px;
-        }
-        
-        /* Botão Voltar */
-        .back-btn {
-            background: #004d40;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            border: none;
-            transition: background 0.3s;
-            margin-bottom: 20px;
-        }
-        
-        .back-btn:hover {
-            background: #00362f;
-        }
-        
-        /* Item de Mensagem */
-        .message-item {
-            background: #f8f9fa;
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #fff;
             padding: 20px;
+            flex-shrink: 0;
+            border-right: 1px solid #e0e0e0;
+            overflow-y: auto;
+        }
+
+        .sidebar h4 {
+            font-weight: 500;
             margin-bottom: 15px;
-            border-radius: 10px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: box-shadow 0.3s ease;
+            color: #333;
         }
-        
-        .message-item:hover {
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
+        .sidebar .category-list {
+            list-style: none;
         }
-        
-        /* Cabeçalho da Mensagem */
-        .message-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+
+        .sidebar .category-list li {
             margin-bottom: 10px;
         }
-        
-        /* Botão de Fixar */
-        .pin-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            color: #004d40;
-            transition: all 0.2s ease;
-            border-radius: 50%;
-        }
-        
-        .pin-btn:hover {
-            transform: scale(1.1);
-            background: rgba(0, 77, 64, 0.1);
-        }
-        
-        .pin-btn.active {
-            color: #ffd700;
-        }
-        
-        .pin-btn.active:hover {
-            background: rgba(255, 215, 0, 0.1);
-        }
-        
-        /* Seção de Mensagens Fixadas */
-        .pinned-section {
-            margin-top: 20px;
-            border-top: 2px dashed #004d40;
-            padding-top: 20px;
-        }
-        
-        .pinned-badge {
-            background: #ffd700;
-            color: #004d40;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            margin-left: 10px;
-            font-weight: 500;
-        }
-        
-        /* Preview da Mensagem */
-        .message-preview {
-            font-size: 14px;
+
+        .sidebar .category-list li a {
+            text-decoration: none;
             color: #555;
-            margin-top: 10px;
-            line-height: 1.4;
-            max-height: 60px;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .sidebar .category-list li a:hover {
+            color: #007bff;
+        }
+
+        /* Conteúdo Principal */
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* Campo de Busca */
+        .search-bar {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 40px 10px 15px;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .search-bar .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 18px;
+        }
+
+        /* Campos de Contato */
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .contact-info .input-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .contact-info .input-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .contact-info .input-group input {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        /* Cartões de Mensagens */
+        .message-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .message-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: calc(33.333% - 20px);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .message-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .message-card .message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .message-card .message-header .icon {
+            font-size: 24px;
+            margin-right: 10px;
+            color: #007bff;
+        }
+
+        .message-card .message-header h5 {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .message-card .message-body {
+            flex: 1;
+            margin-bottom: 15px;
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        
-        /* Input */
-        .input {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
-            margin-bottom: 15px;
-            font-size: 14px;
+
+        .message-card .action-buttons {
+            display: flex;
+            gap: 10px;
         }
-        
-        .input:focus {
-            outline: none;
-            box-shadow: 0 0 8px rgba(0, 184, 148, 0.6);
-            border-color: #007b83;
-        }
-        
-        /* Botões */
-        .btn {
-            padding: 10px 16px;
+
+        .message-card .action-buttons button {
+            flex: 1;
+            padding: 10px;
             border: none;
             border-radius: 5px;
-            color: white;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
-            margin-right: 10px;
-            transition: background 0.3s, transform 0.2s;
+            transition: background-color 0.3s;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 14px;
+            justify-content: center;
+            gap: 5px;
         }
-        
-        .btn-copy { 
-            background: #007965; 
+
+        .message-card .action-buttons .btn-copy {
+            background-color: #28a745;
+            color: #fff;
         }
-        
-        .btn-copy:hover { 
-            background: #006953; 
-            transform: scale(1.05); 
+
+        .message-card .action-buttons .btn-copy:hover {
+            background-color: #218838;
         }
-        
-        .btn-whats { 
-            background: #25D366; 
+
+        .message-card .action-buttons .btn-whatsapp {
+            background-color: #25d366;
+            color: #fff;
         }
-        
-        .btn-whats:hover { 
-            background: #1c9c50; 
-            transform: scale(1.05); 
+
+        .message-card .action-buttons .btn-whatsapp:hover {
+            background-color: #1ebe57;
         }
-        
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #25D366;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            opacity: 0;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            font-size: 14px;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+        .message-card .action-buttons .btn-edit {
+            background-color: #007bff;
+            color: #fff;
         }
-        
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(-10px);
+
+        .message-card .action-buttons .btn-edit:hover {
+            background-color: #0069d9;
         }
-        
-        /* Botão Scroll to Top */
-        .scroll-to-top {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            background: #007965;
-            color: white;
-            padding: 15px;
-            border-radius: 50%;
+
+        /* Botão de Fixar */
+        .message-card .pin-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: background 0.3s, box-shadow 0.3s;
-            z-index: 100;
+            color: #ffc107;
+            font-size: 20px;
+            transition: transform 0.3s;
         }
-        
-        .scroll-to-top:hover {
-            background: #006953;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+
+        .message-card .pin-button:hover {
+            transform: scale(1.2);
         }
-        
+
         /* Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
             align-items: center;
             justify-content: center;
-            z-index: 999;
+            z-index: 2000;
         }
-        
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
         .modal-content {
-            background: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            background-color: #fff;
+            border-radius: 10px;
             width: 90%;
-            max-width: 500px;
-            height: 90%;
-            max-height: 90vh;
-            font-size: 16px;
+            max-width: 600px;
             position: relative;
+            animation: slideDown 0.3s ease-out;
             display: flex;
             flex-direction: column;
+            max-height: 90vh;
+            overflow: hidden;
         }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #ccc;
-        }
-        
-        .modal-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #004d40;
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #004d40;
-        }
-        
-        .modal-close:hover {
-            color: #00362f;
-        }
-        
-        .modal-body {
-            flex: 1;
-            overflow-y: auto;
-            margin-top: 20px;
-        }
-        
-        /* Grupo de Botões */
-        .button-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            padding: 15px;
-            border-top: 1px solid #ccc;
-            background: #f8f9fa;
-        }
-        
-        /* Ajustes Específicos do Card */
-        .message-card h3 {
-            font-size: 16px;
-            margin: 0;
-            font-weight: 500;
-        }
-        
-        .message-card div:first-of-type {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-        
-        .message-card div:last-child {
-            font-size: 14px;
-            opacity: 0.8;
-        }
-        
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .header {
-                padding: 15px;
-            }
-            
-            .message-card {
-                flex: 0 0 140px;
-                padding: 12px;
-            }
-            
-            .modal-content {
-                width: 95%;
-                height: 95vh;
-            }
-        
-            .button-group {
-                flex-wrap: wrap;
-            }
-        
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .message-list {
-                margin: 10px;
-                padding: 15px;
-            }
-        
-            .input {
-                padding: 12px;
-            }
-        
-            .pin-btn {
-                padding: 6px;
-            }
-        }
-        </style>
 
-    
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 100%;
+                height: 100vh;
+                max-width: none;
+                max-height: none;
+                border-radius: 0;
+            }
+        }
+
+        .modal-content h4 {
+            margin-bottom: 20px;
+            color: #333;
+            flex-shrink: 0;
+            padding: 0 20px;
+        }
+
+        .modal-content textarea {
+            width: 100%;
+            flex-grow: 1;
+            padding: 15px 20px;
+            border: none;
+            font-size: 14px;
+            resize: none;
+            overflow-y: auto;
+        }
+
+        .modal-content textarea:focus {
+            outline: none;
+        }
+
+        .modal-content .modal-actions {
+            margin: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .modal-content .modal-actions button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal-content .modal-actions .btn-close {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        .modal-content .modal-actions .btn-close:hover {
+            background-color: #5a6268;
+        }
+
+        .modal-content .modal-actions .btn-save {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .modal-content .modal-actions .btn-save:hover {
+            background-color: #218838;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #343a40;
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s, visibility 0.5s;
+            z-index: 3000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Animações Suaves */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .message-card {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header .menu-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .container-main {
+                flex-direction: column;
+            }
+
+            .message-card {
+                width: 100%;
+            }
+
+            .content {
+                padding: 80px 20px 20px 20px; /* Ajuste para não ficar atrás do menu mobile */
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header .logo {
+                font-size: 20px;
+            }
+
+            .search-bar input {
+                padding: 8px 35px 8px 15px;
+                font-size: 14px;
+            }
+
+            .search-bar .search-icon {
+                font-size: 16px;
+            }
+
+            .message-card .message-header h5 {
+                font-size: 16px;
+            }
+
+            .message-card .message-body {
+                font-size: 13px;
+            }
+
+            .message-card .action-buttons button {
+                font-size: 13px;
+                padding: 8px;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+
+            .modal-content h4 {
+                font-size: 18px;
+            }
+
+            .modal-content textarea {
+                height: 150px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div id="root"></div>
-    <div id="toast" class="toast">Mensagem copiada!</div>
-    <div id="scrollToTop" class="scroll-to-top" style="display: none;">
-        <i class="fas fa-arrow-up"></i>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">MensagemPro</div>
+        <i class="fas fa-bars menu-toggle" id="menuToggle"></i>
+    </header>
+
+    <!-- Menu Horizontal para Mobile -->
+    <nav class="mobile-menu" id="mobileMenu">
+        <ul id="mobileCategoryList">
+            <!-- As categorias serão carregadas dinamicamente -->
+        </ul>
+    </nav>
+
+    <!-- Container Principal -->
+    <div class="container-main">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <h4>Categorias</h4>
+            <ul class="category-list" id="categoryList">
+                <!-- As categorias serão carregadas dinamicamente -->
+            </ul>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="content" id="mainContent">
+            <!-- O conteúdo será carregado dinamicamente -->
+        </main>
     </div>
 
+    <!-- Modal de Edição -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <h4>Editar Mensagem</h4>
+            <textarea id="modalTextarea"></textarea>
+            <div class="modal-actions">
+                <button class="btn-close" id="modalCloseBtn">Fechar</button>
+                <button class="btn-save" id="modalSaveBtn">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">Mensagem copiada!</div>
+
+    <!-- Scripts -->
+    <!-- Bibliotecas -->
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Script Personalizado -->
     <script type="text/babel">
-        function App() {
-    const [name, setName] = React.useState("");
-    const [phone, setPhone] = React.useState("");
-    const [selectedCategory, setSelectedCategory] = React.useState(null);
-    const [isModalOpen, setIsModalOpen] = React.useState(false);
-    const [modalContent, setModalContent] = React.useState({ text: "", categoryId: null, messageIndex: null });
-    const [categories, setCategories] = React.useState({});
-    const [pinnedMessages, setPinnedMessages] = React.useState([]);
-
-    React.useEffect(() => {
-        const request = indexedDB.open("MessagesDB", 2);
-        
-        request.onupgradeneeded = (event) => {
-            const db = event.target.result;
-            
-            if (!db.objectStoreNames.contains("categories")) {
-                const objectStore = db.createObjectStore("categories", { keyPath: "id" });
-                objectStore.transaction.oncomplete = () => {
-                    const categoriesObjectStore = db.transaction("categories", "readwrite").objectStore("categories");
-
-
-
-                    // Suas categorias existentes serão adicionadas aqui
-                    const initialCategories = [
-    {    //SAUDAÇÃO
-        id: "saudacao",
-        title: "Mensagens Saudação",
-        icon: "👋",
-        sortOrder: 1,
-        messages: [
+        // Simulação de dados (Categorias e Mensagens)
+        const categoriesData = [
           
-
-            {
+            // SAUDAÇÃO
+{
+    id: "saudacao",
+    title: "Mensagens Saudação",
+    icon: "👋",
+    sortOrder: 1,
+    messages: [
+        {
+            id: 1,
             title: "Boas-vindas Cordial",
             icon: "😊",
             text: "Olá! Tudo bem com você? É um prazer contar com sua presença. Estamos aqui para entender suas necessidades e oferecer as melhores soluções em películas. Como podemos ser úteis hoje?"
         },
         {
+            id: 2,
             title: "Apresentação Pessoal",
             icon: "🤝",
             text: "[nome] falando da [Nome da Empresa]! Tudo bem com Você? Sabemos que cada cliente é único, e estamos prontos para ouvir e atender às suas necessidades. Em que podemos ajudar?"
         },
         {
+            id: 3,
             title: "Agradecimento Inicial",
             icon: "🙏",
-            text: "Agradeço por entrar em contato conosco. Ta tudo bem com você hoje? quero poder prestar um exelente atendimento. Por favor, compartilhe como podemos ajudar."
+            text: "Agradeço por entrar em contato conosco. Tá tudo bem com você hoje? Quero poder prestar um excelente atendimento. Por favor, compartilhe como podemos ajudar."
         },
         {
+            id: 4,
             title: "Boas-vindas Profissional",
             icon: "💼",
-            text: "Feliz em receber sua mensagem. Sou [nome] pode contar comigo para esclarecer dúvidas e oferecer solução eficaz para você. Como podemos ser úteis hoje?"
+            text: "Feliz em receber sua mensagem. Sou [nome], pode contar comigo para esclarecer dúvidas e oferecer solução eficaz para você. Como podemos ser úteis hoje?"
         },
         {
+            id: 5,
             title: "Atendimento Personalizado",
             icon: "🌟",
-            text: "Entendemos a importância de um atendimento personalizado e estamos aqui para garantir sua satisfação. me chamo [nome] Em que posso ser útil para você hoje?"
+            text: "Entendemos a importância de um atendimento personalizado e estamos aqui para garantir sua satisfação. Me chamo [nome]. Em que posso ser útil para você hoje?"
         },
         {
+            id: 6,
             title: "Saudação com Foco em Soluções",
             icon: "💫",
             text: "Olá, sou [Seu Nome], da [Nome da Empresa]. Espero que esteja bem. Como posso ajudar você hoje?"
         },
         {
-                title: "Anti-Vácuo",
-                icon: "✨",
-                text: "Oi [nome], percebi que não obtive retorno. Ainda posso ajudar com informações sobre nossas películas?"
-            },
-            {
-                title: "Anti-Vácuo agressivo",
-                icon: "⚡",
-                text: "Importante! [nome], não quero que você perca a oportunidade de conhecer nossas soluções em películas. Quando podemos conversar?"
-            },
-            {
-                title: "Encerramento de tentativa",
-                icon: "🔚",
-                text: "Entendo que talvez agora não seja o momento ideal. Ficarei à disposição quando precisar de informações sobre películas. Tenha um ótimo dia!"
-            },
-        
+            id: 7,
+            title: "Anti-Vácuo",
+            icon: "✨",
+            text: "Oi [nome], percebi que não obtive retorno. Ainda posso ajudar com informações sobre nossas películas?"
+        },
+        {
+            id: 8,
+            title: "Anti-Vácuo agressivo",
+            icon: "⚡",
+            text: "Importante! [nome], não quero que você perca a oportunidade de conhecer nossas soluções em películas. Quando podemos conversar?"
+        },
+        {
+            id: 9,
+            title: "Encerramento de tentativa",
+            icon: "🔚",
+            text: "Entendo que talvez agora não seja o momento ideal. Ficarei à disposição quando precisar de informações sobre películas. Tenha um ótimo dia!"
+        }
+    ]
+},
+// INDICAÇÃO
+{
+    id: "indicacao",
+    title: "INDICAÇÃO",
+    icon: "⚡",
+    sortOrder: 2,
+    messages: [
+        {
+            id: 1,
+            title: "Abordagem Inicial - Cliente Indicado",
+            icon: "⚡",
+            text: "Oi [nome],\n\nTudo bem? A [nome da pessoa que indicou] me passou o seu contato. Meu nome é Nathan. Ela me indicou seu contato, eu trabalho com transformação de negócio e aumento de faturamento para empreendedores através das redes sociais."
+        }
         // ... outras mensagens
-        ]
-    },
-    {    //INDICAÇÃO
-        id: "indicacao",
-        title: "INDICAÇÃO",
-        icon: "⚡",
-        sortOrder: 2,
-        messages: [
-            {
-                title: "Abordagem Inicial - Cliente Indicado",
-                text: "Oi [nome],\n\nTudo bem? A [nome da pessoa que indicou] me passou o seu contato. Meu nome é Nathan. Ela me indicou seu contato, eu trabalho com transformação de negócio e aumento de faturamento para empreendedores através das redes sociais."
-            }
-
-
-            // ... outras mensagens
-        ]
-    },
-                   
-    {       //PERGUNTAS
+    ]
+},
+// PERGUNTAS
+{
     id: "perguntas",
-    title: "Perguntas",
+    title: "Perguntas Importantes",
     icon: "❓",
     sortOrder: 4,
     messages: [
         {
+            id: 1,
             title: "Perguntas Vencedoras",
             icon: "🎯",
             text: "Qual é o principal motivo que te fez buscar películas neste momento? Isso me ajudará a oferecer a melhor solução para você."
         },
         {
+            id: 2,
             title: "Demonstrar interesse e atenção",
             icon: "👂",
             text: "Entendi sua necessidade. Me conte mais sobre [aspecto mencionado pelo cliente], assim posso te ajudar de forma mais específica."
         },
         {
+            id: 3,
             title: "Interesse no problema do cliente",
             icon: "🤝",
             text: "Compreendo sua situação com [problema mencionado]. Já ajudamos muitos clientes com desafios similares. Posso te mostrar algumas soluções?"
         },
-      
         {
+            id: 4,
             title: "Cliente Sem Tempo",
             icon: "⏰",
             text: "Sei que seu tempo é valioso. Posso te apresentar rapidamente nossas principais soluções em apenas 5 minutos. O que acha?"
         },
         {
+            id: 5,
             title: "Mandar Depoimento de Outros Clientes",
             icon: "⭐",
             text: "Olha só o que nossos clientes estão falando sobre nossos serviços: [depoimento]. Posso te mostrar mais casos de sucesso similares ao que você procura?"
         }
     ]
 },
-      
-
-{         //ENCANTAMENTO CLIENTE
+// ENCANTAMENTO DO CLIENTE
+{
     id: "encantamento_cliente",
-    title: "Encantamento do cliente",
+    title: "Encanta o cliente",
     icon: "✨",
     sortOrder: 5,
     messages: [
         {
+            id: 1,
             title: "Demonstrar interesse e atenção",
             icon: "🎯",
             text: "Como está sendo sua experiência até agora? Há algo específico que você gostaria de saber mais a respeito?"
         },
         {
+            id: 2,
             title: "Interesse no problema do cliente",
             icon: "🤝",
             text: "Percebo que [situação específica] é importante para você. Posso te explicar como nossas soluções podem ajudar especificamente nesse aspecto?"
         },
         {
+            id: 3,
             title: "Cliente Sem Tempo",
             icon: "⚡",
             text: "Vou ser bem objetivo(a) para otimizar seu tempo. Aqui está o que precisa saber: [pontos principais]. Podemos avançar?"
         },
         {
+            id: 4,
             title: "Mandar Depoimento de Outros Clientes",
             icon: "🌟",
             text: "Gostaria de compartilhar a experiência de um cliente que tinha uma necessidade parecida com a sua: [depoimento relevante]. O que achou?"
         },
         {
+            id: 5,
             title: "Script Mensagem de Ausência",
             icon: "📝",
             text: "Estou temporariamente ausente, mas retorno seu contato em breve para garantir o melhor atendimento possível. Agradeço sua compreensão!"
         },
         {
+            id: 6,
             title: "Feedback de Satisfação",
             icon: "📊",
             text: "Como foi sua experiência com nosso serviço até agora? Seu feedback é muito importante para continuarmos melhorando sempre!"
         }
     ]
 },
-
-                    
-
-{           //AGENDAMENTO
-        id: "agendamento",
-        title: "Agendamento",
-        icon: "📅",
-        sortOrder: 2,
-        messages: [
-            {
-                title: "Agendar horário",
-                icon: "⏰",
-                text: "Que ótimo que você tem interesse! Temos horários disponíveis para [data]. Qual seria melhor para você?"
-            },
-            {
-                title: "Cliente desmarcou",
-                icon: "❌",
-                text: "Entendo que imprevistos acontecem! Podemos remarcar para outro horário que seja mais conveniente para você. Que tal [sugestão de nova data]?"
-            },
-            {
-                title: "Cliente furou",
-                icon: "⚠️",
-                text: "Notei que não conseguimos nos encontrar no horário marcado. Gostaria de remarcar para um horário mais conveniente?"
-            },
-            {
-                title: "Pós reunião/consulta",
-                icon: "✅",
-                text: "Foi um prazer te atender hoje! Espero que tenha gostado de nossas soluções. Estou à disposição para qualquer dúvida adicional."
-            }
-        ]
-    },
-
-
-                    
-
-    {         //LEMBRETE
-        id: "lembrete",
-        title: "Lembrete",
-        icon: "🔔",
-        sortOrder: 3,
-        messages: [
-            {
-                title: "Lembrete de agendamento anti furo",
-                icon: "📝",
-                text: "Olá [nome]! Passando para confirmar nosso horário amanhã às [horário]."
-            },
-            {
-                title: "Lembrete por dia cliente novo",
-                icon: "🆕",
-                text: "Olá [nome]! Lembrando do nosso compromisso hoje às [horário]. Até mais!"
-            },
-            {
-                title: "Lembrete agendamento cliente antigo",
-                icon: "👥",
-                text: "Oi [nome]! Só vim confirmar nosso compromisso de hoje às [data/hora]"
-            }
-        ]
-    },
-
-
-                        
-
-    {      //REATIVAÇÃO
+// AGENDAMENTO
+{
+    id: "agendamento",
+    title: "Agendamento",
+    icon: "📅",
+    sortOrder: 2,
+    messages: [
+        {
+            id: 1,
+            title: "Agendar horário",
+            icon: "⏰",
+            text: "Que ótimo que você tem interesse! Temos horários disponíveis para [data]. Qual seria melhor para você?"
+        },
+        {
+            id: 2,
+            title: "Cliente desmarcou",
+            icon: "❌",
+            text: "Entendo que imprevistos acontecem! Podemos remarcar para outro horário que seja mais conveniente para você. Que tal [sugestão de nova data]?"
+        },
+        {
+            id: 3,
+            title: "Cliente furou",
+            icon: "⚠️",
+            text: "Notei que não conseguimos nos encontrar no horário marcado. Gostaria de remarcar para um horário mais conveniente?"
+        },
+        {
+            id: 4,
+            title: "Pós reunião/consulta",
+            icon: "✅",
+            text: "Foi um prazer te atender hoje! Espero que tenha gostado de nossas soluções. Estou à disposição para qualquer dúvida adicional."
+        }
+    ]
+},
+// LEMBRETE
+{
+    id: "lembrete",
+    title: "Lembrete",
+    icon: "🔔",
+    sortOrder: 3,
+    messages: [
+        {
+            id: 1,
+            title: "Lembrete de agendamento anti furo",
+            icon: "📝",
+            text: "Olá [nome]! Passando para confirmar nosso horário amanhã às [horário]."
+        },
+        {
+            id: 2,
+            title: "Lembrete por dia cliente novo",
+            icon: "🆕",
+            text: "Olá [nome]! Lembrando do nosso compromisso hoje às [horário]. Até mais!"
+        },
+        {
+            id: 3,
+            title: "Lembrete agendamento cliente antigo",
+            icon: "👥",
+            text: "Oi [nome]! Só vim confirmar nosso compromisso de hoje às [data/hora]."
+        }
+    ]
+},
+// REATIVAÇÃO
+{
     id: "reativacao",
-    title: "Reativação",
+    title: "Reativação contato",
     icon: "🔄",
     sortOrder: 6,
     messages: [
         {
+            id: 1,
             title: "Cliente que não respondeu há algum tempo",
             icon: "⏰",
             text: "Olá [nome]! Faz um tempo que não nos falamos e queria saber como você está. Caso ainda tenha interesse em nossas películas, estou à disposição para ajudar!"
         },
         {
+            id: 2,
             title: "Cliente parou de ir",
             icon: "🔙",
             text: "Oi [nome], notei que faz um tempo desde sua última visita. Está tudo bem? Temos novidades em películas que podem te interessar. Posso te contar mais sobre?"
         },
         {
+            id: 3,
             title: "Cliente pediu orçamento e não respondeu",
             icon: "💼",
             text: "Olá [nome]! Lembra do orçamento que fizemos para você? Ainda estou à disposição para esclarecer qualquer dúvida e ajudar você a fazer o melhor investimento em películas."
-        },
+        }
     ]
 },
-
-
-                     
-{     //POS VENDA
+// PÓS VENDA
+{
     id: "pos_venda",
     title: "Pós venda",
     icon: "🎯",
     sortOrder: 7,
     messages: [
         {
+            id: 1,
             title: "Pedir avaliação sobre o produto ou serviço",
             icon: "⭐",
             text: "Olá [nome]! Como foi sua experiência com nossas películas? Seu feedback é muito importante para nós. Poderia compartilhar sua opinião? Isso nos ajuda a melhorar sempre!"
         },
         {
+            id: 2,
             title: "Pedir avaliação no Google",
             icon: "📱",
             text: "Oi [nome]! Sua opinião é muito valiosa para nós. Se puder, gostaria que compartilhasse sua experiência com nossa empresa no Google. Posso te enviar o link?"
         },
         {
+            id: 3,
             title: "Pedir depoimento em vídeo",
             icon: "🎥",
             text: "Oi [nome]! Sua satisfação com nosso serviço nos deixou muito felizes. Gostaria de gravar um breve depoimento em vídeo contando sua experiência? Seria incrível!"
         },
         {
+            id: 4,
             title: "Oferecer brinde para avaliação",
             icon: "🎁",
             text: "Olá [nome]! Para agradecer sua confiança em nosso trabalho, gostaríamos de oferecer um brinde especial em troca de sua avaliação sincera. O que acha?"
         },
         {
+            id: 5,
             title: "Acompanhamento pós-instalação",
             icon: "✅",
             text: "Oi [nome]! Como está a película que instalamos? Está tudo conforme suas expectativas? Estou à disposição para qualquer ajuste ou dúvida que surgir!"
         }
     ]
-},   
-
-
-{         //AVALIAÇÕES GOOGLE
+},
+// AVALIAÇÕES GOOGLE
+{
     id: "google_reviews",
     title: "Avaliações Google",
     icon: "⭐",
     sortOrder: 8,
     messages: [
         {
+            id: 1,
             title: "Solicitar Avaliação Simples",
             icon: "📱",
             text: "Oi [nome]! Sua opinião é muito importante para nós. Se puder nos avaliar no Google, ficaremos muito gratos! Aqui está o link: [link do Google]"
         },
         {
+            id: 2,
             title: "Pedido Detalhado de Avaliação",
             icon: "🌟",
             text: "Olá [nome]! Ficamos muito felizes em te atender. Se possível, poderia compartilhar sua experiência com nossa empresa no Google? Sua avaliação ajuda outros clientes a nos encontrarem. Link: [link do Google]"
         },
         {
+            id: 3,
             title: "Avaliação com Incentivo",
             icon: "🎁",
             text: "Oi [nome]! Para agradecer sua confiança, preparamos um desconto especial na sua próxima visita quando você compartilhar sua experiência no Google. Posso te enviar o link?"
         },
         {
+            id: 4,
             title: "Lembrete de Avaliação",
             icon: "🔔",
             text: "Olá [nome]! Passando para lembrar sobre a avaliação no Google que conversamos. Sua opinião é fundamental para continuarmos melhorando! Aqui está o link novamente: [link do Google]"
         },
         {
+            id: 5,
             title: "Agradecimento por Avaliar",
             icon: "🙏",
             text: "Muito obrigado por nos avaliar no Google, [nome]! Seu feedback é muito valioso e nos ajuda a melhorar sempre. Conte sempre conosco!"
         },
         {
+            id: 6,
             title: "Pós Avaliação Positiva",
             icon: "💫",
             text: "Obrigado pela excelente avaliação, [nome]! Ficamos muito felizes em saber que sua experiência foi positiva. Continuaremos trabalhando para manter esse nível de qualidade!"
         },
         {
+            id: 7,
             title: "Feedback para Melhorias",
             icon: "📝",
             text: "Olá [nome]! Notamos sua avaliação e gostaríamos de entender melhor como podemos melhorar nossos serviços. Poderia nos dar mais detalhes sobre sua experiência?"
         },
         {
+            id: 8,
             title: "Convite para Nova Visita",
             icon: "🎯",
             text: "Obrigado por nos avaliar, [nome]! Como agradecimento, preparamos uma condição especial para sua próxima visita. Quando podemos agendar?"
         }
     ]
 },
-
-        
-{             //PROPOSTA ENVIADA              
-        id: "proposta",
-        title: "Proposta Enviada",
-        icon: "👋",
-        sortOrder: 9,
-        messages: [
+// PROPOSTA ENVIADA
+{
+    id: "proposta",
+    title: "Proposta Enviada",
+    icon: "👋",
+    sortOrder: 9,
+    messages: [
         {
+            id: 1,
             title: "Primeira Mensagem (1-2 dias após a proposta)",
             icon: "🔥",
             text: "Oi [nome]! Passando para ver se teve a oportunidade de analisar nossa proposta de aplicação de película. Alguma dúvida sobre os detalhes, benefícios ou garantias? Estamos aqui para ajudar com o que precisar."
         },
-
         {
-            title: "Segunda Mensagem (3-5 dias após a proposta):",
+            id: 2,
+            title: "Segunda Mensagem (3-5 dias após a proposta)",
             icon: "🔥",
             text: "Olá [nome], só para lembrar que as películas oferecidas estão disponíveis com garantia de qualidade e aplicação certificada. Isso significa que você pode contar com a durabilidade e eficácia comprovada do nosso serviço."
         },
-
         {
+            id: 3,
             title: "Terceira Mensagem (após 7 dias)",
             icon: "🔥",
             text: "Oi [nome]! Queremos que você faça a escolha certa para seu projeto. Ficaremos felizes em ajudar com mais informações ou ajustar a proposta conforme suas necessidades. Conte conosco!"
-
-        },
+        }
     ]
 },
-
-
-{       //PREÇO OBJEÇÕES
+// CLIENTE FALA DO PREÇO
+{
     id: "objecao_preco",
-    title: "Cliente Fala do Preço",
+    title: "Justificando Preço",
     icon: "💰",
     sortOrder: 19,
     messages: [
         {
+            id: 1,
             title: "Valorização do Investimento",
             icon: "💎",
-            text: "Compreendo que o investimento é uma consideração importante. Permita-me destacar que nossas películas são de alta qualidade, oferecendo benefícios como durabilidade, eficiência energética e proteção UV, o que proporciona economia a longo prazo"
+            text: "Compreendo que o investimento é uma consideração importante. Permita-me destacar que nossas películas são de alta qualidade, oferecendo benefícios como durabilidade, eficiência energética e proteção UV, o que proporciona economia a longo prazo."
         },
         {
+            id: 2,
             title: "Aplicação tembem conta",
             icon: "⚖️",
-            text: "Compreendo perfeitamente, mas você esta investindo não apenas na Película mas sim em um serviço de aplicação profissional, garantindo que a película desempenhe sua função de forma eficaz. Nossa empresa é reconhecida pela excelência no atendimento e pela satisfação dos clientes, o que justifica o valor do investimento."
+            text: "Compreendo perfeitamente, mas você está investindo não apenas na película mas sim em um serviço de aplicação profissional, garantindo que a película desempenhe sua função de forma eficaz. Nossa empresa é reconhecida pela excelência no atendimento e pela satisfação dos clientes, o que justifica o valor do investimento."
         },
         {
+            id: 3,
             title: "Condições de Pagamento",
             icon: "💳",
             text: "Olha [nome], para justificar seu investimento, podemos trazer diversas formas de pagamento: parcelamento em até [12x], desconto especial à vista, e até opção de PIX. Qual dessas condições seria mais confortável para você hoje?"
         },
         {
+            id: 4,
             title: "engendecendo nosso serviço",
             icon: "🎯",
-            text: "Entendemos o valor do investimento, e é justamente por isso que garantimos uma aplicação sem bolhas, sem falhas e com alta durabilidade. Nossos clientes são 100% Satisfeitos e sempre acabam indicando nosso serviço,"
+            text: "Entendemos o valor do investimento, e é justamente por isso que garantimos uma aplicação sem bolhas, sem falhas e com alta durabilidade. Nossos clientes são 100% Satisfeitos e sempre acabam indicando nosso serviço."
         },
         {
+            id: 5,
             title: "Promoção Limitada",
             icon: "⚡",
             text: "Sabemos que existem opções mais baratas no mercado. No entanto, nossa empresa se destaca pela excelência no atendimento e pela utilização de materiais de alta qualidade. Nossa equipe é constantemente treinada para oferecer o melhor serviço, o que se reflete nas avaliações positivas de nossos clientes."
         },
         {
+            id: 6,
             title: "Valor Agregado",
             icon: "✨",
-            text: "Além da película em si, [nome], você recebe: instalação profissional, garantia vitalícia e acompanhamento pós-venda"
+            text: "Além da película em si, [nome], você recebe: instalação profissional, garantia vitalícia e acompanhamento pós-venda."
         },
         {
+            id: 7,
             title: "Fechamento com Urgência",
             icon: "🔥",
             text: "Entendo sua análise de preço, [nome]. Justamente por isso separei uma condição especial para você: além do desconto de [20]%, você ainda leva [bônus/brinde: caneca, caneta, flanela]. Mas preciso da sua resposta hoje. Podemos apertar as mãos?"
-        },
+        }
     ]
 },
-
-
-{     //CLIENTE COM MEDO
-        id: "medo",  
-        title: "AGINDO PELO MEDO DE UMA MA APLICAÇÃO ",
-        icon: "⚡",
-        sortOrder: 2,
-        messages: [
-            {
-                title: "Risco de Profissionais Inexperientes:",
-                text:"Sabemos que o mercado está cheio de opções, mas é importante escolher bem. Uma aplicação feita por alguém sem experiência pode resultar em problemas como bolhas, riscos no vidro, e até mesmo danos permanentes nos acabamentos. Aqui, garantimos um serviço impecável, feito por especialistas."
-
-            },
-            {
-                title: "Evite Resultados de Baixa Qualidade",
-                text:"Muitos clientes nos procuram após experiências ruins com outras empresas. Imagine se, em vez de uma película impecável, o resultado fosse uma aplicação cheia de bolhas ou um vidro riscado. Investir em qualidade evita transtornos e retrabalho."
-
-            },
-
-            {
-                title: "Prevenção de Danos e Segurança do Material",
-                text:"A aplicação de película exige cuidados técnicos para proteger cada detalhe do ambiente. Profissionais não capacitados podem acabar riscando o vidro, manchando as paredes, ou até danificando a estrutura ao redor. Com a gente, você evita qualquer preocupação: nossa equipe é treinada para garantir um resultado perfeito e seguro."
-
-            },
-            {
-                title: "Garantia de Acabamento Impecável",
-                text:"Aplicar películas exige não só técnica, mas também um compromisso com o acabamento e a segurança do espaço do cliente. Ao confiar em profissionais menos preparados, há um risco real de sujeira, marcas permanentes e acabamento mal feito. Aqui, garantimos que cada detalhe será tratado com o máximo cuidado."
-                },
-
-                {
-    title: "Histórias de Clientes que Escolheram Mal e Tiveram Prejuízo",
-    text: "Recentemente, um cliente nos procurou após uma experiência ruim com outro aplicador. O resultado foram bolhas e manchas permanentes no vidro, exigindo uma remoção completa e substituição da película. Com nossa experiência e cuidado, garantimos que o trabalho seja impecável desde o início, evitando esse tipo de retrabalho e custo adicional."
-},
+// AGINDO PELO MEDO DE UMA MA APLICAÇÃO
 {
-    title: "Certificações e Treinamento da Equipe",
-    text: "Nossa equipe é treinada e certificada para evitar os problemas mais comuns na aplicação de películas, como riscos no vidro e manchas. Contamos com técnicas exclusivas que garantem uma instalação sem qualquer falha ou dano ao ambiente."
-},
-{
-    title: "Uso de Materiais e Equipamentos de Alta Qualidade",
-    text: "Diferente de aplicadores inexperientes que muitas vezes utilizam materiais inadequados, aqui utilizamos apenas películas de alta qualidade e equipamentos especializados que garantem um acabamento perfeito e duradouro. Trabalhar com o melhor é nossa garantia de um resultado superior."
-},
-{
-    title: "Política de Garantia e Satisfação do Cliente",
-    text: "Nosso compromisso é com a sua satisfação completa. Oferecemos uma política de garantia que cobre qualquer eventual problema, o que significa que, com nossa aplicação, você não corre o risco de surpresas desagradáveis como bolhas ou danos."
-},
-{
-    title: "Comparação com o Mercado",
-    text: "O barato muitas vezes sai caro. Aplicadores sem o devido conhecimento podem parecer vantajosos pelo preço, mas o risco de falhas, retrabalhos e até danos ao seu patrimônio é real. Nós investimos em capacitação e materiais de ponta para garantir um serviço impecável."
+    id: "medo",
+    title: "Agindo pelo Medo",
+    icon: "⚡",
+    sortOrder: 2,
+    messages: [
+        {
+            id: 1,
+            title: "Risco de Profissionais Inexperientes",
+            icon: "⚡",
+            text: "Sabemos que o mercado está cheio de opções, mas é importante escolher bem. Uma aplicação feita por alguém sem experiência pode resultar em problemas como bolhas, riscos no vidro, e até mesmo danos permanentes nos acabamentos. Aqui, garantimos um serviço impecável, feito por especialistas."
+        },
+        {
+            id: 2,
+            title: "Evite Resultados de Baixa Qualidade",
+            icon: "⚡",
+            text: "Muitos clientes nos procuram após experiências ruins com outras empresas. Imagine se, em vez de uma película impecável, o resultado fosse uma aplicação cheia de bolhas ou um vidro riscado. Investir em qualidade evita transtornos e retrabalho."
+        },
+        {
+            id: 3,
+            title: "Prevenção de Danos e Segurança do Material",
+            icon: "⚡",
+            text: "A aplicação de película exige cuidados técnicos para proteger cada detalhe do ambiente. Profissionais não capacitados podem acabar riscando o vidro, manchando as paredes, ou até danificando a estrutura ao redor. Com a gente, você evita qualquer preocupação: nossa equipe é treinada para garantir um resultado perfeito e seguro."
+        },
+        {
+            id: 4,
+            title: "Garantia de Acabamento Impecável",
+            icon: "⚡",
+            text: "Aplicar películas exige não só técnica, mas também um compromisso com o acabamento e a segurança do espaço do cliente. Ao confiar em profissionais menos preparados, há um risco real de sujeira, marcas permanentes e acabamento mal feito. Aqui, garantimos que cada detalhe será tratado com o máximo cuidado."
+        },
+        {
+            id: 5,
+            title: "Histórias de Clientes que Escolheram Mal e Tiveram Prejuízo",
+            icon: "⚡",
+            text: "Recentemente, um cliente nos procurou após uma experiência ruim com outro aplicador. O resultado foram bolhas e manchas permanentes no vidro, exigindo uma remoção completa e substituição da película. Com nossa experiência e cuidado, garantimos que o trabalho seja impecável desde o início, evitando esse tipo de retrabalho e custo adicional."
+        },
+        {
+            id: 6,
+            title: "Certificações e Treinamento da Equipe",
+            icon: "⚡",
+            text: "Nossa equipe é treinada e certificada para evitar os problemas mais comuns na aplicação de películas, como riscos no vidro e manchas. Contamos com técnicas exclusivas que garantem uma instalação sem qualquer falha ou dano ao ambiente."
+        },
+        {
+            id: 7,
+            title: "Uso de Materiais e Equipamentos de Alta Qualidade",
+            icon: "⚡",
+            text: "Diferente de aplicadores inexperientes que muitas vezes utilizam materiais inadequados, aqui utilizamos apenas películas de alta qualidade e equipamentos especializados que garantem um acabamento perfeito e duradouro. Trabalhar com o melhor é nossa garantia de um resultado superior."
+        },
+        {
+            id: 8,
+            title: "Política de Garantia e Satisfação do Cliente",
+            icon: "⚡",
+            text: "Nosso compromisso é com a sua satisfação completa. Oferecemos uma política de garantia que cobre qualquer eventual problema, o que significa que, com nossa aplicação, você não corre o risco de surpresas desagradáveis como bolhas ou danos."
+        },
+        {
+            id: 9,
+            title: "Comparação com o Mercado",
+            icon: "⚡",
+            text: "O barato muitas vezes sai caro. Aplicadores sem o devido conhecimento podem parecer vantajosos pelo preço, mas o risco de falhas, retrabalhos e até danos ao seu patrimônio é real. Nós investimos em capacitação e materiais de ponta para garantir um serviço impecável."
+        }
+    ]
 }
+          
+            // ... outras categorias e mensagens
+        ];
 
+        function App() {
+            // Estados
+            const [categories, setCategories] = React.useState([]);
+            const [selectedCategory, setSelectedCategory] = React.useState(null);
+            const [searchTerm, setSearchTerm] = React.useState('');
+            const [filteredMessages, setFilteredMessages] = React.useState([]);
+            const [modalVisible, setModalVisible] = React.useState(false);
+            const [modalMessage, setModalMessage] = React.useState(null);
+            const [toastMessage, setToastMessage] = React.useState('');
+            const [pinnedMessages, setPinnedMessages] = React.useState([]);
 
+            // Novos estados para o nome e telefone do cliente
+            const [clientName, setClientName] = React.useState('');
+            const [clientPhone, setClientPhone] = React.useState('');
 
+            // Carregar dados iniciais
+            React.useEffect(() => {
+                // Carregar categorias
+                const savedCategories = JSON.parse(localStorage.getItem('categoriesData'));
+                if (savedCategories && savedCategories.length > 0) {
+                    setCategories(savedCategories);
+                } else {
+                    setCategories(categoriesData);
+                }
 
-        ]
-     }
+                // Carregar mensagens fixadas
+                const savedPinnedMessages = JSON.parse(localStorage.getItem('pinnedMessages')) || [];
+                setPinnedMessages(savedPinnedMessages);
 
+                // Carregar dados do cliente
+                const savedClientName = localStorage.getItem('clientName') || '';
+                const savedClientPhone = localStorage.getItem('clientPhone') || '(83) 99647-6052';
+                setClientName(savedClientName);
+                setClientPhone(savedClientPhone);
+            }, []);
 
-    // ... outras categorias
-];
+            // Atualizar mensagens filtradas
+            React.useEffect(() => {
+                filterMessages();
+            }, [categories, selectedCategory, searchTerm]);
 
-// Adiciona cada categoria ao banco de dados
-initialCategories.forEach(category => {
-    categoriesObjectStore.add(category);
-});
+            // Atualizar localStorage sempre que categories mudar
+            React.useEffect(() => {
+                localStorage.setItem('categoriesData', JSON.stringify(categories));
+            }, [categories]);
 
+            // Filtrar mensagens
+            const filterMessages = () => {
+                let messages = [];
+                if (selectedCategory) {
+                    messages = selectedCategory.messages;
+                } else {
+                    categories.forEach(cat => {
+                        messages = messages.concat(cat.messages);
+                    });
+                }
 
-                };
-            }
-            
-            if (!db.objectStoreNames.contains("pinnedMessages")) {
-                db.createObjectStore("pinnedMessages", { keyPath: "id", autoIncrement: true });
-            }
-        };
-
-        request.onsuccess = (event) => {
-            const db = event.target.result;
-            const transaction = db.transaction(["categories", "pinnedMessages"], "readonly");
-            const objectStore = transaction.objectStore("categories");
-            const pinnedStore = transaction.objectStore("pinnedMessages");
-
-            const categoriesRequest = objectStore.getAll();
-            const pinnedRequest = pinnedStore.getAll();
-
-            categoriesRequest.onsuccess = () => {
-                let categoriesData = categoriesRequest.result;
-                categoriesData.sort((a, b) => a.sortOrder - b.sortOrder);
-                setCategories(categoriesData);
-            };
-
-            pinnedRequest.onsuccess = () => {
-                setPinnedMessages(pinnedRequest.result);
-            };
-        };
-    }, []);
-
-// Funções para fixar/desafixar mensagens
-const togglePin = async (message, categoryId) => {
-        const messageId = `${categoryId}-${message.title}`;
-        const existingPin = pinnedMessages.find(pm => pm.messageId === messageId);
-
-        if (existingPin) {
-            setPinnedMessages(prev => prev.filter(pm => pm.id !== existingPin.id));
-            showToast("Mensagem desafixada");
-
-            const request = indexedDB.open("MessagesDB", 2);
-            request.onsuccess = (event) => {
-                const db = event.target.result;
-                const transaction = db.transaction("pinnedMessages", "readwrite");
-                const store = transaction.objectStore("pinnedMessages");
-                store.delete(existingPin.id);
-            };
-        } else {
-            const pinnedMessage = {
-                messageId,
-                categoryId,
-                message,
-                pinnedAt: new Date()
-            };
-
-            const tempId = Date.now();
-            setPinnedMessages(prev => [...prev, { ...pinnedMessage, id: tempId }]);
-            showToast("Mensagem fixada");
-
-            const request = indexedDB.open("MessagesDB", 2);
-            request.onsuccess = (event) => {
-                const db = event.target.result;
-                const transaction = db.transaction("pinnedMessages", "readwrite");
-                const store = transaction.objectStore("pinnedMessages");
-                
-                const addRequest = store.add(pinnedMessage);
-                addRequest.onsuccess = (event) => {
-                    setPinnedMessages(prev => 
-                        prev.map(pm => 
-                            pm.id === tempId ? { ...pm, id: event.target.result } : pm
-                        )
+                if (searchTerm) {
+                    messages = messages.filter(msg =>
+                        msg.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        msg.text.toLowerCase().includes(searchTerm.toLowerCase())
                     );
-                };
+                }
+
+                setFilteredMessages(messages);
             };
-        }
-    };
 
-    // Funções do Modal
-    const openModal = (text, edit = false, categoryId = null, messageIndex = null) => {
-        setModalContent({ text, categoryId, messageIndex });
-        setIsModalOpen(true);
-    };
+            // Selecionar categoria
+            const handleCategorySelect = (category) => {
+                setSelectedCategory(category);
+                setSearchTerm('');
+            };
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
+            // Atualizar termo de busca
+            const handleSearch = (e) => {
+                setSearchTerm(e.target.value);
+            };
 
-    const handleEditMessageInModal = (newText) => {
-        setModalContent(prevContent => ({ ...prevContent, text: newText }));
-    };
+            // Função para substituir [nome] na mensagem
+            const personalizeMessage = (text) => {
+                return text.replace(/\[nome\]/gi, clientName || '[nome]');
+            };
 
-    const saveEditedMessage = () => {
-        const { categoryId, messageIndex, text } = modalContent;
-        
-        const request = indexedDB.open("MessagesDB", 2);
-        request.onsuccess = (event) => {
-            const db = event.target.result;
-            const transaction = db.transaction("categories", "readwrite");
-            const objectStore = transaction.objectStore("categories");
-            const getCategoryRequest = objectStore.get(categoryId);
+            // Função para formatar o telefone para o WhatsApp
+            const formatPhoneNumberForWhatsApp = (phone) => {
+                const numericPhone = phone.replace(/\D/g, '');
+                if (numericPhone.length === 11) {
+                    return `55${numericPhone}`;
+                } else if (numericPhone.length === 13 && numericPhone.startsWith('55')) {
+                    return numericPhone;
+                } else {
+                    return '';
+                }
+            };
 
-            getCategoryRequest.onsuccess = () => {
-                const category = getCategoryRequest.result;
-                category.messages[messageIndex].text = text;
-                const updateRequest = objectStore.put(category);
+            // Função para aplicar máscara no telefone
+            const formatPhoneNumber = (phone) => {
+                phone = phone.replace(/\D/g, '');
 
-                updateRequest.onsuccess = () => {
-                    setCategories(prevCategories => {
-                        const updatedCategories = prevCategories.map(cat => {
-                            if (cat.id === categoryId) {
-                                return {
-                                    ...cat,
-                                    messages: cat.messages.map((msg, idx) => 
-                                        idx === messageIndex ? { ...msg, text } : msg
-                                    )
-                                };
-                            }
-                            return cat;
-                        });
-                        return updatedCategories;
-                    });
+                if (phone.length > 0) {
+                    phone = phone.replace(/^(\d{2})(\d)/g, '($1) $2');
+                }
+                if (phone.length > 9) {
+                    phone = phone.replace(/(\d{5})(\d{4})$/, '$1-$2');
+                } else if (phone.length > 5) {
+                    phone = phone.replace(/(\d{4})(\d{0,4})$/, '$1-$2');
+                }
 
-                    setSelectedCategory(prev => {
-                        if (prev.id === categoryId) {
-                            const updatedMessages = [...prev.messages];
-                            updatedMessages[messageIndex] = {
-                                ...updatedMessages[messageIndex],
-                                text
-                            };
-                            return {
-                                ...prev,
-                                messages: updatedMessages
-                            };
+                return phone;
+            };
+
+            // Funções de mudança dos campos de contato
+            const handleClientNameChange = (e) => {
+                const name = e.target.value;
+                setClientName(name);
+                localStorage.setItem('clientName', name);
+            };
+
+            const handleClientPhoneChange = (e) => {
+                let phone = e.target.value;
+                phone = formatPhoneNumber(phone);
+                setClientPhone(phone);
+                localStorage.setItem('clientPhone', phone);
+            };
+
+            // Copiar mensagem
+            const copyMessage = (text) => {
+                const personalizedText = personalizeMessage(text);
+                navigator.clipboard.writeText(personalizedText);
+                showToast('Mensagem copiada com sucesso!');
+            };
+
+            // Enviar via WhatsApp
+            const sendWhatsApp = (text) => {
+                const personalizedText = personalizeMessage(text);
+                const phoneNumber = formatPhoneNumberForWhatsApp(clientPhone);
+                if (phoneNumber) {
+                    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(personalizedText)}`;
+                    window.open(url, '_blank');
+                } else {
+                    showToast('Número de telefone inválido!');
+                }
+            };
+
+            // Abrir modal de edição
+            const openEditModal = (message) => {
+                setModalMessage({ ...message });
+                setModalVisible(true);
+            };
+
+            // Salvar mensagem editada
+            const saveEditedMessage = () => {
+                const updatedCategories = categories.map(cat => {
+                    const updatedMessages = cat.messages.map(msg => {
+                        if (msg.id === modalMessage.id) {
+                            return { ...modalMessage };
                         }
-                        return prev;
+                        return msg;
                     });
+                    return { ...cat, messages: updatedMessages };
+                });
+                setCategories(updatedCategories);
 
-                    showToast("Mensagem salva com sucesso!");
-                    setIsModalOpen(false);
-                };
+                // Atualizar mensagens fixadas, se necessário
+                const isPinned = pinnedMessages.some(msg => msg.id === modalMessage.id);
+                if (isPinned) {
+                    const updatedPinnedMessages = pinnedMessages.map(msg => {
+                        if (msg.id === modalMessage.id) {
+                            return { ...modalMessage };
+                        }
+                        return msg;
+                    });
+                    setPinnedMessages(updatedPinnedMessages);
+                    localStorage.setItem('pinnedMessages', JSON.stringify(updatedPinnedMessages));
+                }
+
+                // Salvar as categorias atualizadas no localStorage
+                localStorage.setItem('categoriesData', JSON.stringify(updatedCategories));
+
+                setModalVisible(false);
+                showToast('Mensagem atualizada com sucesso!');
             };
-        };
-    };
 
-    // Funções utilitárias
-    const copyMessage = (text) => {
-        const finalText = text.replace('[nome]', name || 'cliente');
-        navigator.clipboard.writeText(finalText);
-        showToast("Mensagem copiada!");
-    };
+            // Mostrar toast
+            const showToast = (message) => {
+                setToastMessage(message);
+                const toastEl = document.getElementById('toast');
+                toastEl.classList.add('show');
+                setTimeout(() => {
+                    toastEl.classList.remove('show');
+                    setToastMessage('');
+                }, 3000);
+            };
 
-    const sendWhatsApp = (text) => {
-        const cleanPhone = phone.replace(/\D/g, '');
-        if (cleanPhone.length < 11) {
-            alert('Por favor, insira um número de telefone válido com DDD');
-            return;
-        }
-        const finalText = text.replace('[nome]', name || 'cliente');
-        window.location.href = `https://wa.me/55${cleanPhone}?text=${encodeURIComponent(finalText)}`;
-    };
+            // Fixar ou desafixar mensagem
+            const togglePinMessage = (message) => {
+                let updatedPinnedMessages = [];
+                if (pinnedMessages.some(msg => msg.id === message.id)) {
+                    updatedPinnedMessages = pinnedMessages.filter(msg => msg.id !== message.id);
+                    showToast('Mensagem desafixada!');
+                } else {
+                    updatedPinnedMessages = [...pinnedMessages, message];
+                    showToast('Mensagem fixada!');
+                }
+                setPinnedMessages(updatedPinnedMessages);
+                localStorage.setItem('pinnedMessages', JSON.stringify(updatedPinnedMessages));
+            };
 
-    const showToast = (message) => {
-        const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2000);
-    };
+            // Renderizar categorias na sidebar e no menu mobile
+            React.useEffect(() => {
+                renderCategories();
+            }, [categories]);
 
-    const handleScroll = () => {
-        const scrollToTopBtn = document.getElementById('scrollToTop');
-        if (window.scrollY > 200) {
-            scrollToTopBtn.style.display = 'block';
-        } else {
-            scrollToTopBtn.style.display = 'none';
-        }
-    };
+            const renderCategories = () => {
+                const categoryList = categories.map(category => (
+                    <li key={category.id}>
+                        <a href="#" onClick={() => handleCategorySelect(category)}>
+                            {category.title}
+                        </a>
+                    </li>
+                ));
 
-    React.useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+                // Sidebar
+                ReactDOM.render(
+                    <ul className="category-list">
+                        <li>
+                            <a href="#" onClick={() => handleCategorySelect(null)}>Todas as Mensagens</a>
+                        </li>
+                        {categoryList}
+                    </ul>,
+                    document.getElementById('categoryList')
+                );
 
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+                // Menu Mobile
+                ReactDOM.render(
+                    <ul>
+                        <li>
+                            <a href="#" onClick={() => handleCategorySelect(null)}>Todas</a>
+                        </li>
+                        {categoryList}
+                    </ul>,
+                    document.getElementById('mobileCategoryList')
+                );
+            };
 
-    return (
-        <>
-            <div className="header">
-                <input
-                    className="input"
-                    placeholder="Nome do Cliente"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    autoFocus
-                />
-                <input
-                    className="input"
-                    placeholder="WhatsApp"
-                    value={phone}
-                    onChange={e => setPhone(e.target.value.replace(/\D/g, '').replace(/^(\d{2})(\d)/g, '($1) $2').replace(/(\d)(\d{4})$/, '$1-$2'))}
-                />
-            </div>
-
-            <div className="scroll-container">
-                {Object.values(categories).map(category => (
-                    <div 
-                        key={category.id} 
-                        className="message-card"
-                        onClick={() => setSelectedCategory(category)}
-                    >
-                        <div style={{fontSize: '16px'}}>{category.icon}</div>
-                        <h3>{category.title}</h3>
-                        <div>Acessar →</div>
+            return (
+                <>
+                    {/* Campo de Busca */}
+                    <div className="search-bar" style={{ marginBottom: '20px' }}>
+                        <input
+                            type="text"
+                            placeholder="Buscar mensagens..."
+                            value={searchTerm}
+                            onChange={handleSearch}
+                        />
+                        <i className="fas fa-search search-icon"></i>
                     </div>
-                ))}
-            </div>
 
-            {pinnedMessages.length > 0 && !selectedCategory && (
-                <div className="message-list container">
-                    <h3 style={{color: '#004d40', marginBottom: '15px'}}>
-                        Mensagens Fixadas <span className="pinned-badge">{pinnedMessages.length}</span>
-                    </h3>
-                    {pinnedMessages.map((pinnedMsg) => (
-                        <div key={pinnedMsg.id} className="message-item">
-                            <div className="message-header">
-                                <h3 style={{fontSize: '18px'}}>
-                                    {pinnedMsg.message.title}
-                                </h3>
-                                <button 
-                                    className="pin-btn active"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        togglePin(pinnedMsg.message, pinnedMsg.categoryId);
-                                    }}
-                                >
-                                    <i className="fas fa-star"></i>
-                                </button>
-                            </div>
-                            <div 
-                                className="message-preview"
-                                onClick={() => openModal(pinnedMsg.message.text, true, pinnedMsg.categoryId, null)}
-                            >
-                                {pinnedMsg.message.text}
-                            </div>
-                            <div className="button-group">
-                                <button 
-                                    className="btn btn-copy"
-                                    onClick={() => copyMessage(pinnedMsg.message.text)}
-                                >
-                                    <i className="fas fa-copy"></i> Copiar
-                                </button>
-                                <button 
-                                    className="btn btn-whats"
-                                    onClick={() => sendWhatsApp(pinnedMsg.message.text)}
-                                >
-                                    <i className="fab fa-whatsapp"></i> WhatsApp
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {selectedCategory && (
-                <div className="message-list container">
-                    <button className="back-btn" onClick={() => setSelectedCategory(null)}>
-                        <i className="fas fa-arrow-left"></i> Voltar
-                    </button>
-                    <h2 style={{color: '#004d40', marginBottom: '20px'}}>
-                        {selectedCategory.title}
-                    </h2>
-                    {selectedCategory.messages.map((message, index) => (
-                        <div key={index} className="message-item">
-                            <div className="message-header">
-                                <h3 style={{fontSize: '18px'}}>
-                                    {message.title}
-                                </h3>
-                                <button 
-                                    className={`pin-btn ${pinnedMessages.some(pm => 
-                                        pm.messageId === `${selectedCategory.id}-${message.title}`
-                                    ) ? 'active' : ''}`}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        togglePin(message, selectedCategory.id);
-                                    }}
-                                >
-                                    <i className="fas fa-star"></i>
-                                </button>
-                            </div>
-                            <div 
-                                className="message-preview"
-                                onClick={() => openModal(message.text, true, selectedCategory.id, index)}
-                            >
-                                {message.text}
-                            </div>
-                            <div className="button-group">
-                                <button 
-                                    className="btn btn-copy"
-                                    onClick={() => copyMessage(message.text)}
-                                >
-                                    <i className="fas fa-copy"></i> Copiar
-                                </button>
-                                <button 
-                                    className="btn btn-whats"
-                                    onClick={() => sendWhatsApp(message.text)}
-                                >
-                                    <i className="fab fa-whatsapp"></i> WhatsApp
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {isModalOpen && (
-                <div className="modal-overlay" onClick={closeModal}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <div className="modal-header">
-                            <span className="modal-title">Editar Mensagem</span>
-                            <button className="modal-close" onClick={closeModal}>&times;</button>
-                        </div>
-                        <div className="modal-body">
-                            <textarea
-                                className="input"
-                                value={modalContent.text}
-                                onChange={(e) => handleEditMessageInModal(e.target.value)}
-                                style={{ height: 'calc(100vh - 250px)', width: '100%' }}
+                    {/* Campos de Nome e Telefone */}
+                    <div className="contact-info">
+                        <div className="input-group">
+                            <label htmlFor="clientName">Nome:</label>
+                            <input
+                                type="text"
+                                id="clientName"
+                                value={clientName}
+                                onChange={handleClientNameChange}
+                                placeholder="Nome do Cliente"
                             />
                         </div>
-                        <div className="button-group">
-                            <button className="btn btn-success" onClick={saveEditedMessage}>Salvar</button>
-                            <button className="btn btn-danger" onClick={closeModal}>Fechar</button>
-                            <button className="btn btn-whats" onClick={() => sendWhatsApp(modalContent.text)}>
-                                <i className="fab fa-whatsapp"></i>
-                            </button>
+                        <div className="input-group">
+                            <label htmlFor="clientPhone">Telefone:</label>
+                            <input
+                                type="text"
+                                id="clientPhone"
+                                value={clientPhone}
+                                onChange={handleClientPhoneChange}
+                                placeholder="(83) 99647-6052"
+                            />
                         </div>
                     </div>
-                </div>
-            )}
-        </>
-    );
-}
 
-ReactDOM.render(<App />, document.getElementById('root'));
+                    {/* Mensagens Fixadas */}
+                    {pinnedMessages.length > 0 && (
+                        <div>
+                            <h4>Mensagens Fixadas</h4>
+                            <div className="message-list">
+                                {pinnedMessages.map(message => (
+                                    <div className="message-card fade-in" key={message.id}>
+                                        <button className="pin-button" onClick={() => togglePinMessage(message)}>
+                                            <i className="fas fa-star"></i>
+                                        </button>
+                                        <div className="message-header">
+                                            <span className="icon">{message.icon}</span>
+                                            <h5>{message.title}</h5>
+                                        </div>
+                                        <div className="message-body">
+                                            {personalizeMessage(message.text)}
+                                        </div>
+                                        <div className="action-buttons">
+                                            <button className="btn-copy" onClick={() => copyMessage(message.text)}>
+                                                <i className="fas fa-copy"></i> Copiar
+                                            </button>
+                                            <button className="btn-whatsapp" onClick={() => sendWhatsApp(message.text)}>
+                                                <i className="fab fa-whatsapp"></i> WhatsApp
+                                            </button>
+                                            <button className="btn-edit" onClick={() => openEditModal(message)}>
+                                                <i className="fas fa-edit"></i> Editar
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
+                    {/* Lista de Mensagens */}
+                    <h4>{selectedCategory ? selectedCategory.title : 'Todas as Mensagens'}</h4>
+                    <div className="message-list">
+                        {filteredMessages.map(message => (
+                            <div className="message-card fade-in" key={message.id}>
+                                <button className="pin-button" onClick={() => togglePinMessage(message)}>
+                                    <i className={pinnedMessages.some(msg => msg.id === message.id) ? 'fas fa-star' : 'far fa-star'}></i>
+                                </button>
+                                <div className="message-header">
+                                    <span className="icon">{message.icon}</span>
+                                    <h5>{message.title}</h5>
+                                </div>
+                                <div className="message-body">
+                                    {personalizeMessage(message.text)}
+                                </div>
+                                <div className="action-buttons">
+                                    <button className="btn-copy" onClick={() => copyMessage(message.text)}>
+                                        <i className="fas fa-copy"></i> Copiar
+                                    </button>
+                                    <button className="btn-whatsapp" onClick={() => sendWhatsApp(message.text)}>
+                                        <i className="fab fa-whatsapp"></i> WhatsApp
+                                    </button>
+                                    <button className="btn-edit" onClick={() => openEditModal(message)}>
+                                        <i className="fas fa-edit"></i> Editar
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
 
+                    {/* Modal de Edição */}
+                    {modalVisible && (
+                        <div className="modal-overlay active" onClick={() => setModalVisible(false)}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <h4>Editar Mensagem</h4>
+                                <textarea
+                                    value={modalMessage.text}
+                                    onChange={(e) => setModalMessage({ ...modalMessage, text: e.target.value })}
+                                ></textarea>
+                                <div className="modal-actions">
+                                    <button className="btn-close" onClick={() => setModalVisible(false)}>Fechar</button>
+                                    <button className="btn-save" onClick={saveEditedMessage}>Salvar</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Toast Notification */}
+                    <div className="toast" id="toast">{toastMessage}</div>
+                </>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('mainContent'));
+
+        // Evento para o botão de menu no mobile
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenu.style.display === 'block') {
+                mobileMenu.style.display = 'none';
+            } else {
+                mobileMenu.style.display = 'block';
+            }
+        });
     </script>
 </body>
 </html>
