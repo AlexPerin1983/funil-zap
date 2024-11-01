@@ -9,306 +9,407 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css"> <!-- Aqui vai o CSS que te passei antes -->
+
+
     <style>
+        /* Reset e Estilos Base */
         * { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
-}
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        body { 
+            background: #f4f4f9; 
+            font-family: 'Helvetica Neue', sans-serif; 
+            font-size: 16px; 
+            color: #333; 
+        }
+        
+        /* Header */
+        .header {
+            background: #ffffff;
+            padding: 20px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        /* Container de Rolagem */
+        .scroll-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 20px;
+            gap: 15px;
+            margin-top: 100px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Cards de Mensagem */
+        .message-card {
+            flex: 0 0 160px;
+            min-height: 100px;
+            background: linear-gradient(135deg, #007b83, #004d40);
+            border-radius: 15px;
+            padding: 16px;
+            color: white;
+            cursor: pointer;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .message-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Lista de Mensagens */
+        .message-list {
+            background: #ffffff;
+            margin: 20px;
+            padding: 25px;
+            border-radius: 20px;
+            min-height: 400px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .scroll-container + .message-list {
+            margin-top: 20px;
+        }
+        
+        /* Botão Voltar */
+        .back-btn {
+            background: #004d40;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .back-btn:hover {
+            background: #00362f;
+        }
+        
+        /* Item de Mensagem */
+        .message-item {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .message-item:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Cabeçalho da Mensagem */
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        /* Botão de Fixar */
+        .pin-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: #004d40;
+            transition: all 0.2s ease;
+            border-radius: 50%;
+        }
+        
+        .pin-btn:hover {
+            transform: scale(1.1);
+            background: rgba(0, 77, 64, 0.1);
+        }
+        
+        .pin-btn.active {
+            color: #ffd700;
+        }
+        
+        .pin-btn.active:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        /* Seção de Mensagens Fixadas */
+        .pinned-section {
+            margin-top: 20px;
+            border-top: 2px dashed #004d40;
+            padding-top: 20px;
+        }
+        
+        .pinned-badge {
+            background: #ffd700;
+            color: #004d40;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+            font-weight: 500;
+        }
+        
+        /* Preview da Mensagem */
+        .message-preview {
+            font-size: 14px;
+            color: #555;
+            margin-top: 10px;
+            line-height: 1.4;
+            max-height: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Input */
+        .input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .input:focus {
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 184, 148, 0.6);
+            border-color: #007b83;
+        }
+        
+        /* Botões */
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background 0.3s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .btn-copy { 
+            background: #007965; 
+        }
+        
+        .btn-copy:hover { 
+            background: #006953; 
+            transform: scale(1.05); 
+        }
+        
+        .btn-whats { 
+            background: #25D366; 
+        }
+        
+        .btn-whats:hover { 
+            background: #1c9c50; 
+            transform: scale(1.05); 
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #25D366;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            font-size: 14px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-10px);
+        }
+        
+        /* Botão Scroll to Top */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: #007965;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s, box-shadow 0.3s;
+            z-index: 100;
+        }
+        
+        .scroll-to-top:hover {
+            background: #006953;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+        
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            height: 90%;
+            max-height: 90vh;
+            font-size: 16px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ccc;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #004d40;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #004d40;
+        }
+        
+        .modal-close:hover {
+            color: #00362f;
+        }
+        
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        /* Grupo de Botões */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            padding: 15px;
+            border-top: 1px solid #ccc;
+            background: #f8f9fa;
+        }
+        
+        /* Ajustes Específicos do Card */
+        .message-card h3 {
+            font-size: 16px;
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        .message-card div:first-of-type {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .message-card div:last-child {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px;
+            }
+            
+            .message-card {
+                flex: 0 0 140px;
+                padding: 12px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                height: 95vh;
+            }
+        
+            .button-group {
+                flex-wrap: wrap;
+            }
+        
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .message-list {
+                margin: 10px;
+                padding: 15px;
+            }
+        
+            .input {
+                padding: 12px;
+            }
+        
+            .pin-btn {
+                padding: 6px;
+            }
+        }
+        </style>
 
-body { 
-    background: #f4f4f9; 
-    font-family: 'Helvetica Neue', sans-serif; 
-    font-size: 16px; 
-    color: #333; 
-}
-
-.header {
-    background: #ffffff;
-    padding: 20px;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.scroll-container {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding: 20px;
-    gap: 15px;
-    margin-top: 100px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-}
-
-.scroll-container::-webkit-scrollbar {
-    display: none;
-}
-
-.message-card {
-    flex: 0 0 160px;
-    min-height: 100px;
-    background: linear-gradient(135deg, #007b83, #004d40);
-    border-radius: 15px;
-    padding: 16px;
-    color: white;
-    cursor: pointer;
-    scroll-snap-align: start;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.message-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-.message-list {
-    background: #ffffff;
-    margin: 20px;
-    padding: 25px;
-    border-radius: 20px;
-    min-height: 400px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    position: relative;
-}
-
-.back-btn {
-    background: #004d40;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
-    transition: background 0.3s;
-    margin-bottom: 20px;
-}
-
-.back-btn:hover {
-    background: #00362f;
-}
-
-.message-item {
-    background: #f8f9fa;
-    padding: 20px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: box-shadow 0.3s ease;
-}
-
-.message-item:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.message-preview {
-    font-size: 14px;
-    color: #555;
-    margin-top: 10px;
-    line-height: 1.4;
-    max-height: 60px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.input {
-    width: 100%;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-    margin-bottom: 15px;
-    font-size: 14px;
-}
-
-.input:focus {
-    box-shadow: 0 0 8px rgba(0, 184, 148, 0.6);
-}
-
-.btn {
-    padding: 10px 16px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    margin-right: 10px;
-    transition: background 0.3s, transform 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-}
-
-.btn-copy { 
-    background: #007965; 
-}
-
-.btn-copy:hover { 
-    background: #006953; 
-    transform: scale(1.05); 
-}
-
-.btn-whats { 
-    background: #25D366; 
-}
-
-.btn-whats:hover { 
-    background: #1c9c50; 
-    transform: scale(1.05); 
-}
-
-.toast {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #25D366;
-    color: white;
-    padding: 15px 25px;
-    border-radius: 10px;
-    opacity: 0;
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    font-size: 14px;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-10px);
-}
-
-.scroll-to-top {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    background: #007965;
-    color: white;
-    padding: 15px;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background 0.3s, box-shadow 0.3s;
-}
-
-.scroll-to-top:hover {
-    background: #006953;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-}
-
-.modal-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    width: 90%;
-    max-width: 500px;
-    height: 90%;
-    max-height: 90vh;
-    font-size: 16px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #ccc;
-}
-
-.modal-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: #004d40;
-}
-
-.modal-close {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #004d40;
-}
-
-.modal-close:hover {
-    color: #00362f;
-}
-
-.modal-body {
-    flex: 1;
-    overflow-y: auto;
-    margin-top: 20px;
-}
-
-.button-group {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    padding: 15px;
-    border-top: 1px solid #ccc;
-    background: #f8f9fa;
-}
-
-/* Ajustes específicos do card */
-.message-card h3 {
-    font-size: 16px;
-    margin: 0;
-    font-weight: 500;
-}
-
-.message-card div:first-of-type {
-    font-size: 24px;
-    margin-bottom: 8px;
-}
-
-.message-card div:last-child {
-    font-size: 14px;
-    opacity: 0.8;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .header {
-        padding: 15px;
-    }
     
-    .message-card {
-        flex: 0 0 140px;
-        padding: 12px;
-    }
-    
-    .modal-content {
-        width: 95%;
-        height: 95vh;
-    }
-}
-    </style>
 </head>
 <body>
     <div id="root"></div>
@@ -319,963 +420,370 @@ body {
 
     <script type="text/babel">
         function App() {
-            const [name, setName] = React.useState("");
-            const [phone, setPhone] = React.useState("");
-            const [selectedCategory, setSelectedCategory] = React.useState(null);
-            const [isModalOpen, setIsModalOpen] = React.useState(false);
-            const [modalContent, setModalContent] = React.useState({ text: "", categoryId: null, messageIndex: null });
-            const [categories, setCategories] = React.useState({});
+    const [name, setName] = React.useState("");
+    const [phone, setPhone] = React.useState("");
+    const [selectedCategory, setSelectedCategory] = React.useState(null);
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [modalContent, setModalContent] = React.useState({ text: "", categoryId: null, messageIndex: null });
+    const [categories, setCategories] = React.useState({});
+    const [pinnedMessages, setPinnedMessages] = React.useState([]);
 
-            // IndexedDB setup
-            React.useEffect(() => {
-                const request = indexedDB.open("MessagesDB", 1);
-                request.onupgradeneeded = (event) => {
-                    const db = event.target.result;
-                    if (!db.objectStoreNames.contains("categories")) {
-                        const objectStore = db.createObjectStore("categories", { keyPath: "id" });
-                        objectStore.transaction.oncomplete = () => {
-                            const categoriesObjectStore = db.transaction("categories", "readwrite").objectStore("categories");
-
-                        // 1. Boas-Vindas e Primeiros Contatos
-
-// 1. Boas-Vindas e Primeiros Contatos
-categoriesObjectStore.add({
-    id: "greetings",
-    title: "Mensagens Saudação",
-    icon: "👋",
-    sortOrder: 1,
-    messages: [
-        {
-            title: "Boas-vindas com Apresentação de Serviços",
-            icon: "🎉",
-            text: "Boa tarde, seja bem-vindo ao atendimento do (meu nome) da empresa (nome da empresa). Aqui trabalhamos com tráfego pago, social media e mentoria de atendimento no WhatsApp. É um prazer receber o seu contato. Para agilizar, me diga: qual sua dúvida?"
-        },
-        {
-            title: "Boas-vindas da Agência",
-            icon: "🚀",
-            text: "Olá, seja bem-vindo ao atendimento da (nome da empresa), a melhor agência quando o assunto é marketing digital. Para continuar seu atendimento, me diga qual o seu nome e qual produto tem interesse?"
-        },
-        {
-            title: "Boas-vindas e Pergunta sobre Desafios",
-            icon: "💡",
-            text: "Olá, obrigado pelo seu contato. Me diga, qual desafio que você está enfrentando que podemos ajudar?"
-        },
-        {
-            title: "Boas-vindas com Introdução da Equipe",
-            icon: "🙋‍♀️",
-            text: "Olá, tudo bem? Meu nome é Rafaela da equipe do Nathan do Marketing. Obrigado por entrar em contato, para prosseguir com o seu atendimento, me diga qual o seu nome?"
-        },
-        {
-            title: "Boas-vindas da Empresa",
-            icon: "🏢",
-            text: "Olá! Seja bem-vindo(a)! Somos a empresa [NOME DA EMPRESA]. Escreva seu interesse ou dúvida logo abaixo, e logo você será atendido!"
-        }
-    ]
-});
-
-// 2. Referências e Indicações
-categoriesObjectStore.add({
-    id: "indicacao",
-    title: "INDICAÇÃO",
-    icon: "⚡",
-    sortOrder: 2,
-    messages: [
-        {
-            title: "Abordagem Inicial - Cliente Indicado",
-            text: "Oi [nome],\n\nTudo bem? A [nome da pessoa que indicou] me passou o seu contato. Meu nome é Nathan. Ela me indicou seu contato, eu trabalho com transformação de negócio e aumento de faturamento para empreendedores através das redes sociais."
-        },
-        {
-            title: "Agendamento de Conversa",
-            text: "Para podermos conversar melhor, qual melhor dia para agendarmos uma conversa? Hoje às 17:00 ou amanhã?"
-        }      
-    ]
-});
-
-// 3. Agendamento de Reuniões
-categoriesObjectStore.add({
-    id: "agenda",
-    title: "AGENDA",
-    icon: "📆",
-    sortOrder: 3,
-    messages: [
-        {
-            title: "Agendar Horário",
-            text: "Olá [nome],\n\nTenho certeza de que uma rápida reunião sobre [produto/serviço] pode te proporcionar [benefício específico]. Posso reservar 30 minutos do seu tempo na [data/horário sugerido]? Vai valer a pena, prometo!"
-        },
-        {
-            title: "Valor Exclusivo",
-            text: "Oi [nome],\n\nQuero te oferecer uma solução personalizada para [dor ou necessidade do cliente]. Para garantir que seja algo realmente exclusivo e eficaz, precisamos nos reunir. Que tal [data/horário sugerido]? Essa oportunidade é única!"
-        },
-        {
-            title: "Escassez de Tempo",
-            text: "Olá [nome],\n\nMinha agenda para a próxima semana está quase cheia, mas faço questão de garantir um espaço para você. Podemos agendar para [data/horário sugerido]? Não perca essa chance de resolver [problema específico] com [produto/serviço]."
-        },
-        {
-            title: "Garantia de Solução",
-            text: "Oi [nome],\n\nEstou confiante de que nossa reunião vai resolver [problema do cliente] de forma definitiva. Posso te atender na [data/horário sugerido]? Vamos trabalhar juntos para transformar isso em realidade."
-        },
-        {
-            title: "Acompanhamento Estratégico",
-            text: "Olá [nome],\n\nNossa reunião pode ser o próximo passo crucial para [meta do cliente]. Tenho algumas estratégias que podem acelerar seus resultados. Podemos agendar para [data/horário sugerido]? Não vejo a hora de discutirmos isso."
-        },
-        {
-            title: "Investimento de Tempo Inteligente",
-            text: "Oi [nome],\n\nInvestir 30 minutos do seu tempo na nossa reunião pode te economizar [quantidade de tempo ou dinheiro] no futuro com [produto/serviço]. Vamos agendar para [data/horário sugerido]? Será um investimento que valerá a pena!"
-        }
-    ]
-});
-
-// 4. Confirmações e Lembretes de Agendamento
-// 4.1 Evitando Furo
-categoriesObjectStore.add({
-    id: "lembrete_agendamento",
-    title: "Evitando Furo",
-    icon: "📅",
-    sortOrder: 4,
-    messages: [
-        {
-            title: "Lembrete Sutil",
-            icon: "🔔",
-            text: "Olá [nome],\n\nEspero que esteja bem! Apenas lembrando que temos nosso encontro agendado para [data/horário]. Estou ansioso para nossa conversa e para compartilhar as soluções que preparamos especialmente para você."
-        },
-        {
-            title: "Confirmação Cordial",
-            icon: "✅",
-            text: "Oi [nome],\n\nTudo certo? Nosso horário para [data/horário] está confirmado. Tenho certeza de que será um encontro produtivo e esclarecedor. Fico à disposição caso precise ajustar algo."
-        },
-        {
-            title: "Agradecimento e Lembrete",
-            icon: "🙏",
-            text: "Olá [nome],\n\nAgradeço por reservar um tempo para nossa reunião em [data/horário]. Estou preparando tudo para que seja o mais proveitosa possível. Nos vemos em breve!"
-        },
-        {
-            title: "Expectativa Positiva",
-            icon: "🎯",
-            text: "Oi [nome],\n\nSó para confirmar que nossa reunião está marcada para [data/horário]. Estou empolgado para discutirmos [assunto específico] e como podemos avançar juntos. Até lá!"
-        },
-        {
-            title: "Toque de Exclusividade",
-            icon: "💎",
-            text: "Olá [nome],\n\nTudo certo? Lembrando que temos um horário reservado para você em [data/horário]. Esse tempo foi especialmente dedicado para discutir suas necessidades e encontrar as melhores soluções. Será um prazer falar com você!"
-        },
-        {
-            title: "Lembrete para Amanhã",
-            icon: "⏰",
-            text: "Olá [nome],\n\nSó passando para lembrar que nossa reunião é amanhã, às [horário]. Estou ansioso para conversarmos e avançarmos com [assunto específico]. Qualquer necessidade, estou à disposição!"
-        },
-        {
-            title: "Lembrete no Dia",
-            icon: "📆",
-            text: "Bom dia, [nome]!\n\nNossa reunião está confirmada para hoje, às [horário]. Estou preparado para discutirmos [assunto específico] e garantir que seja um encontro produtivo. Nos falamos em breve!"
-        },
-        {
-            title: "Lembrete Amigável",
-            icon: "😊",
-            text: "Olá [nome],\n\nEstou ansioso para nossa reunião/consulta agendada para [data/horário]. Este é um lembrete amigável para garantir que você tenha tudo pronto. Se precisar ajustar o horário ou tiver alguma dúvida, estou à disposição."
-        },
-        {
-            title: "2 Dias Antes",
-            icon: "⏳",
-            text: "Oi [nome],\n\nFalta pouco para nossa reunião/consulta em [data/horário]. Só queria relembrar a data e garantir que está tudo certo. Estou aqui para qualquer ajuste ou esclarecimento que você precise."
-        },
-        {
-            title: "1 Dia Antes",
-            icon: "📆",
-            text: "Olá [nome],\n\nAmanhã é o dia da nossa reunião/consulta às [horário]. Estou ansioso para nosso encontro e pronto para discutir [assunto específico]. Se precisar de algo antes disso, por favor, me avise."
-        },
-        {
-            title: "No Dia",
-            icon: "🔔",
-            text: "Oi [nome],\n\nHoje é o dia da nossa reunião/consulta às [horário]. Estarei pronto para nossa conversa e para responder a quaisquer perguntas. Se houver qualquer mudança ou imprevisto, por favor, me informe."
-        }
-    ]
-});
-
-// 4.2 Lembrar Agenda Cliente Existente
-categoriesObjectStore.add({
-    id: "lembrete_agendamento_cliente_existente",
-    title: "Lembrar Agenda Cliente",
-    icon: "📅",
-    sortOrder: 5,
-    messages: [
-        {
-            title: "4 Dias Antes",
-            icon: "🗓️",
-            text: "Olá [nome],\n\nEstou lembrando que temos uma reunião/consulta agendada para [data/horário]. Quero garantir que você esteja preparado e pronto para nossa discussão. Se precisar de algo ou quiser ajustar o horário, me avise."
-        },
-        {
-            title: "2 Dias Antes",
-            icon: "⏳",
-            text: "Oi [nome],\n\nNossa reunião/consulta está se aproximando, marcada para [data/horário]. Só para confirmar que tudo está em ordem e que você está pronto para nossa conversa. Estou disponível para qualquer dúvida ou ajuste necessário."
-        },
-        {
-            title: "1 Dia Antes",
-            icon: "📅",
-            text: "Olá [nome],\n\nSó um lembrete de que nossa reunião/consulta é amanhã às [horário]. Estou ansioso para nossa discussão e pronto para qualquer questão que você possa ter. Se precisar de algo antes do encontro, é só me falar."
-        },
-        {
-            title: "No Dia",
-            icon: "🔔",
-            text: "Oi [nome],\n\nHoje é o dia da nossa reunião/consulta às [horário]. Estarei disponível para nossa conversa e para qualquer necessidade de última hora. Se houver qualquer mudança, por favor, me avise o quanto antes."
-        }
-    ]
-});
-
-// 5. Exploração e Qualificação
-// 5.1 Perguntas e Exploração
-categoriesObjectStore.add({
-    id: "perguntas_exploracao",
-    title: "Perguntas e Exploração",
-    icon: "💬",
-    sortOrder: 6,
-    messages: [
-        {
-            title: "Objetivo ou Desafio Principal",
-            icon: "🎯",
-            text: "Boa tarde [nome], qual o seu principal objetivo ou desafio em relação a [ASSUNTO DO QUE VENDE]?"
-        },
-        {
-            title: "Busca por Diferenciais",
-            icon: "🌟",
-            text: "O que você procura como diferencial nesse produto/serviço?"
-        },
-        {
-            title: "Incomodações com o Tema",
-            icon: "❓",
-            text: "O que mais te incomoda quando o tema é [ASSUNTO DO PRODUTO QUE VOCÊ VENDE]?"
-        },
-        {
-            title: "Opções Alternativas",
-            icon: "🔄",
-            text: "Você tem interesse apenas nesse modelo ou posso te mostrar outras opções?"
-        },
-        {
-            title: "Especificação de Necessidade",
-            icon: "🔍",
-            text: "Pode me dizer em detalhes o que está procurando?"
-        },
-        {
-            title: "Investimento Estimado",
-            icon: "💰",
-            text: "Você tem ideia do quanto quer investir?"
-        },
-        {
-            title: "Critério de Escolha",
-            icon: "🔑",
-            text: "O que você considera mais importante para escolher com quem vai fechar?"
-        },
-        {
-            title: "Experiência Anterior",
-            icon: "📋",
-            text: "Você já passou por esse procedimento alguma vez?"
-        },
-        {
-            title: "Benefício Mais Importante",
-            icon: "🎁",
-            text: "De todos os benefícios desse produto/serviço, qual é o mais importante para você?"
-        },
-        {
-            title: "Verificação de Entendimento",
-            icon: "🤔",
-            text: "Até agora, entendeu tudo que te passei? Está com alguma dúvida?"
-        },
-        {
-            title: "Confirmação Pré-Investimento",
-            icon: "📈",
-            text: "Antes de eu te apresentar os valores de investimento, faz sentido o que te apresentei até agora ou ficou com alguma dúvida?"
-        },
-        {
-            title: "Soluções Adicionais",
-            icon: "💡",
-            text: "E o que você acha se ao invés de você ter apenas (SOLUÇÃO DO SEU PRODUTO) você também resolvesse (MAIS UMA SOLUÇÃO) e (OUTRA SOLUÇÃO), pagando menos?"
-        },
-        {
-            title: "Forma de Pagamento",
-            icon: "💳",
-            text: "O valor é X. Qual a melhor forma de pagamento para você?"
-        },
-        {
-            title: "Escolha do Link de Pagamento",
-            icon: "🔗",
-            text: "Você prefere que eu te mande o link para pagamento ou pix?"
-        },
-        {
-            title: "Incentivo de Oportunidade",
-            icon: "🔥",
-            text: "O que falta para você não perder essa oportunidade?"
-        }
-    ]
-});
-
-// 5.2 Interesse no Problema
-categoriesObjectStore.add({
-    id: "interesse_problema_cliente",
-    title: "Interesse no Problema",
-    icon: "🧐",
-    sortOrder: 7,
-    messages: [
-        {
-            title: "Pergunta Aberta",
-            icon: "💬",
-            text: "Olá [nome],\n\nEspero que esteja bem. Queria entender melhor suas necessidades para garantir que possamos oferecer a melhor solução para você. Há algum desafio específico que você está enfrentando atualmente?"
-        },
-        {
-            title: "Identificação de Problema",
-            icon: "🔍",
-            text: "Oi [nome],\n\nPercebi que você mencionou [problema específico] anteriormente. Gostaria de saber mais sobre como isso está impactando você e como podemos ajudar a resolver isso da melhor forma possível. Podemos conversar mais sobre isso?"
-        },
-        {
-            title: "Solução Personalizada",
-            icon: "🎯",
-            text: "Olá [nome],\n\nEstamos aqui para ajudar! Gostaríamos de entender melhor os detalhes da sua situação para que possamos oferecer uma solução personalizada. Existe algum aspecto específico que você acha que precisa de mais atenção?"
-        },
-        {
-            title: "Acompanhamento Proativo",
-            icon: "🤝",
-            text: "Oi [nome],\n\nComo estão as coisas desde nossa última conversa? Se há algo que não foi resolvido ou qualquer nova dificuldade que surgiu, estou aqui para ajudar. Vamos discutir como podemos avançar juntos?"
-        },
-        {
-            title: "Consulta Detalhada",
-            icon: "🔎",
-            text: "Olá [nome],\n\nGostaria de entender melhor o que você precisa para garantir que estamos alinhados com suas expectativas. Você poderia compartilhar mais detalhes sobre os desafios que está enfrentando atualmente?"
-        },
-        {
-            title: "Preocupação com a Situação Atual",
-            icon: "🆘",
-            text: "Oi [nome],\n\nEstou preocupado em saber se você está enfrentando algum problema ou dificuldade recente. Estamos prontos para oferecer o suporte necessário. Como posso ajudar a melhorar sua situação?"
-        },
-        {
-            title: "Enfoque no Impacto",
-            icon: "⚖️",
-            text: "Olá [nome],\n\nGostaria de saber mais sobre como [problema ou situação] está afetando você. Entender o impacto real nos permitirá fornecer uma solução mais eficaz. Podemos discutir isso em mais detalhes?"
-        },
-        {
-            title: "Empatia e Ajuda",
-            icon: "❤️",
-            text: "Oi [nome],\n\nEntendo que você pode estar passando por um momento desafiador. Estou aqui para ouvir e ajudar da melhor forma possível. Como posso ser útil para aliviar ou resolver o problema que você está enfrentando?"
-        },
-        {
-            title: "Detalhes do Desafio",
-            icon: "📝",
-            text: "Olá [nome],\n\nPara podermos ajudar da melhor forma, preciso entender melhor os detalhes do desafio que você está enfrentando. Poderia me dar mais informações sobre o que está acontecendo e como isso está impactando você?"
-        },
-        {
-            title: "Abordagem de Solução",
-            icon: "🔧",
-            text: "Oi [nome],\n\nQueremos garantir que você receba a ajuda que precisa. Pode me contar mais sobre o problema específico que está enfrentando para que possamos encontrar a solução mais adequada para você?"
-        }
-    ]
-});
-
-// 6. Encantamento e Engajamento do Cliente
-categoriesObjectStore.add({
-    id: "encantamento_cliente",
-    title: "Encantamento do Cliente",
-    icon: "👉🏻",
-    sortOrder: 8,
-    messages: [
-        {
-            title: "Como Está Indo Seu Dia",
-            icon: "🌞",
-            text: "Olá [nome], como está indo seu dia? Há algo específico com o qual você precisa de ajuda hoje?"
-        },
-        {
-            title: "Andamento do Assunto Específico",
-            icon: "🔍",
-            text: "Oi [nome], só queria saber como está o andamento de [assunto específico]. Está precisando de algum suporte adicional?"
-        },
-        {
-            title: "Mudanças no Plano",
-            icon: "🔄",
-            text: "Olá [nome], tivemos alguma mudança no seu plano ou nas suas necessidades desde nossa última conversa?"
-        },
-        {
-            title: "Compreender Expectativas",
-            icon: "🎯",
-            text: "Oi [nome], gostaria de entender melhor o que você espera alcançar com [produto/serviço]. Pode me dar mais detalhes?"
-        },
-        {
-            title: "Feedback Sobre Experiência",
-            icon: "💬",
-            text: "Olá [nome], como foi a experiência com [produto/serviço] até agora? Há algo que possamos melhorar?"
-        },
-        {
-            title: "Desafios Atuais",
-            icon: "⚙️",
-            text: "Oi [nome], quais são seus principais desafios atuais relacionados a [área específica]? Podemos trabalhar juntos para solucioná-los."
-        },
-        {
-            title: "Obstáculos Enfrentados",
-            icon: "🚧",
-            text: "Olá [nome], você encontrou algum obstáculo ou dificuldade desde que começamos a trabalhar juntos? Estou aqui para ajudar."
-        },
-        {
-            title: "Próximos Passos",
-            icon: "➡️",
-            text: "Oi [nome], queria saber se você tem alguma dúvida ou preocupação sobre o próximo passo em nosso processo."
-        },
-        {
-            title: "Prévia da Próxima Reunião",
-            icon: "📅",
-            text: "Olá [nome], estamos nos aproximando da nossa próxima reunião. Há algo específico que você gostaria de discutir ou revisar?"
-        },
-        {
-            title: "Implementação da Solução",
-            icon: "⚒️",
-            text: "Oi [nome], como está indo a implementação de [solução ou serviço]? Posso oferecer algum suporte adicional?"
-        },
-        {
-            title: "Resolução de Problemas",
-            icon: "💡",
-            text: "Olá [nome], você conseguiu resolver [problema específico]? Se precisar de ajuda, estou à disposição para orientar."
-        },
-        {
-            title: "Feedback Geral",
-            icon: "📝",
-            text: "Oi [nome], gostaria de saber como está a sua experiência geral com [produto/serviço]. Alguma sugestão ou feedback?"
-        },
-        {
-            title: "Prioridade para Próxima Conversa",
-            icon: "🔝",
-            text: "Olá [nome], tem alguma questão ou tópico que você gostaria de priorizar em nossa próxima conversa?"
-        },
-        {
-            title: "Progresso das Metas",
-            icon: "📈",
-            text: "Oi [nome], como está o progresso em relação às metas que estabelecemos? Existe algo que possamos ajustar?"
-        },
-        {
-            title: "Detalhe da Última Conversa",
-            icon: "📝",
-            text: "Olá [nome], vi que você mencionou [detalhe específico] na nossa última conversa. Há alguma atualização sobre isso?"
-        },
-        {
-            title: "Confirmação de Documentos",
-            icon: "📄",
-            text: "Oi [nome], só para garantir, você recebeu todas as informações e documentos necessários para [assunto específico]?"
-        },
-        {
-            title: "Satisfação com o Serviço",
-            icon: "🤲",
-            text: "Olá [nome], como você está se sentindo em relação ao serviço que está recebendo? Posso fazer algo para melhorar sua experiência?"
-        },
-        {
-            title: "Exploração de Funcionalidades",
-            icon: "🔍",
-            text: "Oi [nome], existe algum aspecto específico de [produto/serviço] que você gostaria de explorar mais a fundo?"
-        },
-        {
-            title: "Atendimento às Expectativas",
-            icon: "🔧",
-            text: "Olá [nome], quero garantir que estamos atendendo às suas expectativas. Há algo mais que eu possa fazer para ajudar?"
-        },
-        {
-            title: "Ajuste na Agenda",
-            icon: "📅",
-            text: "Oi [nome], qual seria o melhor horário para você se precisarmos ajustar algo no nosso plano atual? Estou flexível para atender sua agenda."
-        }
-    ]
-});
-
-// 7. Gestão de Objeções
-// 7.1 Objeções Gerais
-categoriesObjectStore.add({
-    id: "objections",
-    title: "Objeções",
-    icon: "💭",
-    sortOrder: 9,
-    messages: [
-        {
-            title: "Preço Alto",
-            text: `Olá [nome], eu entendo sua preocupação com o custo. 💸
-
-É importante lembrar que nossa película reduz até 85% do calor e economiza até 30% na conta de energia. A longo prazo, o investimento acaba se pagando e traz conforto duradouro. 😊
-
-Posso ajudar com mais detalhes?`
-        },
-        {
-            title: "Preciso Pensar",
-            text: `Claro [nome], eu entendo que essa decisão precisa de reflexão. 🧠
-
-Posso fornecer exemplos reais de economia e depoimentos de clientes satisfeitos, isso pode ajudar você a ter mais clareza.
-
-Posso enviar mais informações? 📄`
-        },
-        {
-            title: "Concorrência Mais Barata",
-            text: `[nome], entendo que você possa ter visto ofertas mais baratas. ⚖️
-
-Nossas películas são importadas, com garantia de durabilidade e eficiência. Além disso, oferecemos garantia vitalícia, diferente das películas comuns no mercado. 
-
-Vamos comparar juntos os benefícios? 😊`
-        },
-        {
-            title: "Estou Sem Pressa",
-            text: `Sem problemas, [nome]! 😊
-
-Mas vale lembrar que quanto antes a película for instalada, mais cedo você começará a economizar energia e proteger seu ambiente.
-
-Quer aproveitar nossa oferta especial enquanto está disponível? 🕒`
-        },
-        {
-            title: "Já Tenho Película",
-            text: `Oi [nome], compreendo que você já tenha uma película instalada. 😃
-
-Porém, nossas películas são de última geração, com melhor desempenho em redução de calor e durabilidade garantida. Pode ser o momento de melhorar ainda mais o conforto do seu ambiente.
-
-Podemos agendar uma avaliação gratuita? 📋`
-        }
-    ]
-});
-
-// 7.2 Cita a Concorrência
-categoriesObjectStore.add({
-    id: "concorrencia_preco",
-    title: "Cita a Concorrência",
-    icon: "💲",
-    sortOrder: 10,
-    messages: [
-        {
-            title: "Valorização do Produto",
-            icon: "🌟",
-            text: "Compreendo [nome], mas hoje o que valorizamos em nosso produto é o resultado que entregamos em qualidade, suporte e uma boa plataforma."
-        },
-        {
-            title: "Foco na Qualidade",
-            icon: "🔝",
-            text: "Caso o preço seja o principal diferencial que esteja buscando, não poderei te ajudar. Mas garanto a qualidade do produto. Você quer marcar um horário para conhecer melhor o produto?"
-        }
-    ]
-});
-
-// 8. Fechamento da Venda
-categoriesObjectStore.add({
-    id: "closing",
-    title: "Fechamento",
-    icon: "🤝",
-    sortOrder: 11,
-    messages: [
-        {
-            title: "Proposta Final",
-            text: `[nome], baseado no que conversamos, preparei uma proposta especial:
-
-💫 Película premium com garantia vitalícia
-💰 30% de desconto para pagamento à vista
-🎁 Brinde especial na instalação
-⚡ Instalação em até 48h
-
-Podemos agendar a instalação? 📅`
-        },
-        {
-            title: "Urgência",
-            text: `[nome], temos uma condição especial válida até hoje:
-
-🏷️ 20% de desconto na instalação
-🎯 Amostra grátis para teste
-⏰ Instalação prioritária
-
-O que acha de aproveitar essa oportunidade? 💫`
-        }
-    ]
-});
-
-// 9. Pós-Venda e Fidelização
-// 9.1 Anti_Vacuo (Follow-up Pós-Venda)
-categoriesObjectStore.add({
-    id: "anti_vacuo",
-    title: "Anti_Vacuo",
-    icon: "🤝",
-    sortOrder: 12,
-    messages: [
-        {
-            title: "Follow-up Amigável",
-            text: "Olá [nome],\n\nEspero que esteja tudo bem com você! Só queria retomar nossa conversa sobre [produto/serviço]. Estou disponível para esclarecer qualquer dúvida ou seguir em frente com o próximo passo quando você estiver pronto.\n\nFico à disposição para ajudar!"
-        },
-        {
-            title: "Oferta de Ajuda",
-            text: "Oi [nome],\n\nNotei que não voltamos a nos falar desde nossa última conversa. Entendo que a correria do dia a dia pode ser intensa, então estou aqui para ajudar com qualquer dúvida ou questão que tenha sobre [produto/serviço].\n\nSerá um prazer ajudá-lo!"
-        },
-        {
-            title: "Relembrando Benefícios",
-            text: "Olá [nome],\n\nQueria saber se ainda está interessado em [produto/serviço]. Lembre-se de que ele pode [mencionar os principais benefícios], e estou aqui para garantir que você aproveite ao máximo.\n\nSe tiver alguma pergunta ou precisar de mais informações, é só me avisar!"
-        },
-        {
-            title: "Foco no Timing",
-            text: "Oi [nome],\n\nEspero que esteja bem! Estava pensando sobre nossa última conversa e queria saber se este é o momento certo para avançar com [produto/serviço]. Estou à disposição para adaptar nossa proposta ou esclarecer dúvidas que possam surgir.\n\nAguardo seu retorno!"
-        },
-        {
-            title: "Oferecendo uma Solução",
-            text: "Olá [nome],\n\nPercebi que não voltamos a nos falar. Pode ser que algo tenha mudado em suas necessidades, e estou aqui para ajustar nossa oferta de [produto/serviço] de acordo com o que você realmente precisa.\n\nFique à vontade para me contatar, estou aqui para ajudar!"
-        },
-        {
-            title: "Última Chance (Gentil)",
-            text: "Oi [nome],\n\nQuero garantir que você não perca a oportunidade de [benefício do produto/serviço]. Se ainda estiver interessado, estarei disponível para conversarmos e encontrar a melhor solução para você.\n\nEstou aqui caso queira retomar a conversa!"
-        },
-        {
-            title: "Toque de Urgência (Agressivo)",
-            text: "Oi [nome],\n\nVocê não vai acreditar na oportunidade que está passando despercebida. Preciso falar com você sobre [produto/serviço] antes que seja tarde demais. Me manda uma mensagem para não perder essa!"
-        },
-        {
-            title: "Algo Exclusivo para Você",
-            text: "[nome],\n\nAcabei de garantir algo exclusivo para você com relação ao [produto/serviço], mas preciso da sua resposta o mais rápido possível. Você não vai querer ficar de fora disso!"
-        },
-        {
-            title: "Algo Inesperado Aconteceu",
-            text: "[nome],\n\nAconteceu algo inesperado que pode mudar completamente nossa proposta de [produto/serviço]. Preciso falar com você agora para te explicar!"
-        },
-        {
-            title: "Última Chance de Aproveitar",
-            text: "[nome],\n\nEstou para fechar um negócio que pode impactar diretamente a oferta que fiz pra você sobre [produto/serviço]. Essa é sua última chance de aproveitar! Me responde o quanto antes."
-        }
-    ]
-});
-
-// 9.2 Pedir Avaliação
-categoriesObjectStore.add({
-    id: "pedir_avaliacao",
-    title: "Pedir Avaliações",
-    icon: "📝",
-    sortOrder: 13,
-    messages: [
-        {
-            title: "Solicitação Simples e Agradecimento",
-            icon: "😊",
-            text: "Olá [nome],\n\nEspero que esteja bem! Gostaria de saber como foi sua experiência com nosso [serviço/atendimento]. Sua opinião é muito importante para nós e ajuda a melhorar nossos serviços. Pode dedicar um minuto para deixar uma avaliação? Agradecemos muito!"
-        },
-        {
-            title: "Pedido de Feedback com Valor",
-            icon: "🌟",
-            text: "Oi [nome],\n\nFoi um prazer atendê-lo recentemente. Para continuarmos a oferecer um excelente serviço, gostaríamos de saber sua opinião sobre o atendimento que recebeu. Por favor, compartilhe sua avaliação e qualquer sugestão que possa ter. Sua contribuição é fundamental para nós!"
-        },
-        {
-            title: "Agradecimento e Avaliação Detalhada",
-            icon: "📋",
-            text: "Olá [nome],\n\nObrigado por escolher nosso [serviço/consultório/clínica]. Esperamos que sua experiência tenha sido positiva. Se puder, gostaríamos muito que você nos desse um feedback detalhado sobre o que gostou e o que podemos melhorar. Isso nos ajuda a servir você e outros clientes ainda melhor!"
-        },
-        {
-            title: "Envio de Link para Avaliação",
-            icon: "🔗",
-            text: "Oi [nome],\n\nObrigado por confiar em nossos serviços. Para garantir que estamos sempre melhorando, pedimos que você nos ajude com uma breve avaliação. Clique [aqui/link] para deixar sua opinião. Seu feedback é muito importante para nós e será muito apreciado!"
-        },
-        {
-            title: "Acompanhamento Pós-Serviço",
-            icon: "📞",
-            text: "Olá [nome],\n\nEspero que tenha ficado satisfeito com nosso [serviço/atendimento]. Para nos ajudar a manter a qualidade, gostaríamos de saber sua opinião. Por favor, avalie nosso serviço e compartilhe suas impressões. Estamos sempre buscando maneiras de melhorar e seu feedback é essencial!"
-        },
-        {
-            title: "Avaliação com Agradecimento Especial",
-            icon: "💖",
-            text: "Oi [nome],\n\nAgradecemos por ter utilizado nosso [serviço/atendimento]. Para nos ajudar a continuar oferecendo um serviço de alta qualidade, gostaríamos de pedir sua avaliação. Suas palavras fazem toda a diferença e ajudarão outros clientes a conhecer nossa qualidade. Obrigado pelo seu tempo!"
-        }
-    ]
-});
-
-// 10. Gestão de Agendamentos Cancelados ou Não Comparecimentos
-// 10.1 Cliente Desmarcou
-categoriesObjectStore.add({
-    id: "cliente_desmarcou",
-    title: "CLIENTE DESMARCOU",
-    icon: "🔄",
-    sortOrder: 14,
-    messages: [
-        {
-            title: "Oportunidade Irrecusável",
-            text: "Olá [nome],\n\nEntendo que precisou desmarcar nossa reunião/consulta. O que íamos discutir é uma oportunidade que pode realmente fazer a diferença para você. Gostaria muito de garantir que você não perca isso. Podemos remarcar para [nova data/horário]? Será um encontro crucial para alcançar [resultado desejado]."
-        },
-        {
-            title: "Foco em Solução Personalizada",
-            text: "Oi [nome],\n\nLamento que não conseguimos nos encontrar como planejado. Tenho certeza de que a solução personalizada que preparei para você é exatamente o que precisa para resolver [problema ou necessidade]. Que tal remarcar para [nova data/horário]? Não quero que perca essa chance."
-        },
-        {
-            title: "Reforçando o Impacto Positivo",
-            text: "Olá [nome],\n\nCompreendo que algo surgiu e tivemos que adiar nosso compromisso. Acredito que nossa reunião/consulta pode ser um divisor de águas para [meta ou objetivo]. Vamos remarcar para [nova data/horário]? Tenho certeza de que valerá muito a pena."
-        },
-        {
-            title: "Senso de Urgência e Prioridade",
-            text: "Oi [nome],\n\nSei que imprevistos acontecem, mas o assunto que íamos discutir é de alta prioridade para alcançar [benefício específico]. Não quero que isso fique pendente. Posso agendar um novo horário em [nova data/horário]? Vamos garantir que você não perca essa oportunidade!"
-        }
-    ]
-});
-
-// 10.2 Cliente Furou
-categoriesObjectStore.add({
-    id: "cliente_furou",
-    title: "CLIENTE FUROU",
-    icon: "🔔",
-    sortOrder: 15,
-    messages: [
-        {
-            title: "Reconhecimento e Novo Agendamento",
-            icon: "⏳",
-            text: "Olá [nome],\n\nNotamos que não conseguimos nos encontrar na data agendada e ficamos aguardando sua presença. Entendemos que imprevistos acontecem e gostaríamos de reagendar para um horário que seja mais conveniente para você. Que tal [nova data/horário]? Estamos à disposição para encontrar um momento que se ajuste à sua agenda."
-        },
-        {
-            title: "Apreciação e Nova Oportunidade",
-            icon: "💼",
-            text: "Oi [nome],\n\nPercebemos que não pudemos realizar nossa reunião/consulta conforme planejado e ficamos esperando por você. Acreditamos que o que temos a discutir é muito importante e queremos oferecer uma nova oportunidade para isso. Podemos marcar um novo horário em [nova data/horário]? Aguardo sua confirmação!"
-        },
-        {
-            title: "Senso de Importância e Reagendamento",
-            icon: "📆",
-            text: "Olá [nome],\n\nVimos que não conseguimos nos encontrar no horário combinado e ficamos aguardando. Entendemos que sua agenda pode ser cheia, mas gostaríamos muito de discutir [assunto específico] com você. Que tal reagendarmos para [nova data/horário]? Estamos prontos para encontrar um momento que funcione melhor para você."
-        },
-        {
-            title: "Elegância e Flexibilidade",
-            icon: "📭",
-            text: "Oi [nome],\n\nNotamos que não pudemos realizar nossa consulta/reunião conforme agendado e ficamos esperando sua presença. Compreendemos que podem ocorrer imprevistos e estamos aqui para acomodar sua agenda. Podemos marcar um novo horário em [nova data/horário]? Fico à disposição para ajustar conforme necessário."
-
-
-
-                          
-                                    }
-                                ]
-                            });
-                        };
-                    }
+    React.useEffect(() => {
+        const request = indexedDB.open("MessagesDB", 2);
+        
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            
+            if (!db.objectStoreNames.contains("categories")) {
+                const objectStore = db.createObjectStore("categories", { keyPath: "id" });
+                objectStore.transaction.oncomplete = () => {
+                    const categoriesObjectStore = db.transaction("categories", "readwrite").objectStore("categories");
+                    // Suas categorias existentes serão adicionadas aqui
                 };
+            }
+            
+            if (!db.objectStoreNames.contains("pinnedMessages")) {
+                db.createObjectStore("pinnedMessages", { keyPath: "id", autoIncrement: true });
+            }
+        };
 
-                request.onsuccess = (event) => {
-                    const db = event.target.result;
-                    const transaction = db.transaction("categories", "readonly");
-                    const objectStore = transaction.objectStore("categories");
-                    const allCategoriesRequest = objectStore.getAll();
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction(["categories", "pinnedMessages"], "readonly");
+            const objectStore = transaction.objectStore("categories");
+            const pinnedStore = transaction.objectStore("pinnedMessages");
 
-                    allCategoriesRequest.onsuccess = () => {
-    let categoriesData = allCategoriesRequest.result;
-    
-    // Ordena as categorias com base no sortOrder
-    categoriesData.sort((a, b) => a.sortOrder - b.sortOrder);
-    
-    setCategories(categoriesData);
-};
+            const categoriesRequest = objectStore.getAll();
+            const pinnedRequest = pinnedStore.getAll();
 
+            categoriesRequest.onsuccess = () => {
+                let categoriesData = categoriesRequest.result;
+                categoriesData.sort((a, b) => a.sortOrder - b.sortOrder);
+                setCategories(categoriesData);
+            };
+
+            pinnedRequest.onsuccess = () => {
+                setPinnedMessages(pinnedRequest.result);
+            };
+        };
+    }, []);
+
+// Funções para fixar/desafixar mensagens
+const togglePin = async (message, categoryId) => {
+        const messageId = `${categoryId}-${message.title}`;
+        const existingPin = pinnedMessages.find(pm => pm.messageId === messageId);
+
+        if (existingPin) {
+            setPinnedMessages(prev => prev.filter(pm => pm.id !== existingPin.id));
+            showToast("Mensagem desafixada");
+
+            const request = indexedDB.open("MessagesDB", 2);
+            request.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction("pinnedMessages", "readwrite");
+                const store = transaction.objectStore("pinnedMessages");
+                store.delete(existingPin.id);
+            };
+        } else {
+            const pinnedMessage = {
+                messageId,
+                categoryId,
+                message,
+                pinnedAt: new Date()
+            };
+
+            const tempId = Date.now();
+            setPinnedMessages(prev => [...prev, { ...pinnedMessage, id: tempId }]);
+            showToast("Mensagem fixada");
+
+            const request = indexedDB.open("MessagesDB", 2);
+            request.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction("pinnedMessages", "readwrite");
+                const store = transaction.objectStore("pinnedMessages");
+                
+                const addRequest = store.add(pinnedMessage);
+                addRequest.onsuccess = (event) => {
+                    setPinnedMessages(prev => 
+                        prev.map(pm => 
+                            pm.id === tempId ? { ...pm, id: event.target.result } : pm
+                        )
+                    );
                 };
-            }, []);
-
-            const copyMessage = (text) => {
-                const finalText = text.replace('[nome]', name || 'cliente');
-                navigator.clipboard.writeText(finalText);
-                const toast = document.getElementById('toast');
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2000);
             };
+        }
+    };
 
-            const sendWhatsApp = (text) => {
-                const cleanPhone = phone.replace(/\D/g, '');
-                if (cleanPhone.length < 11) {
-                    alert('Por favor, insira um número de telefone válido com DDD');
-                    return;
-                }
-                const finalText = text.replace('[nome]', name || 'cliente');
-                window.location.href = `https://wa.me/55${cleanPhone}?text=${encodeURIComponent(finalText)}`;
-            };
+    // Funções do Modal
+    const openModal = (text, edit = false, categoryId = null, messageIndex = null) => {
+        setModalContent({ text, categoryId, messageIndex });
+        setIsModalOpen(true);
+    };
 
-            const handleScroll = () => {
-                const scrollToTopBtn = document.getElementById('scrollToTop');
-                if (window.scrollY > 200) {
-                    scrollToTopBtn.style.display = 'block';
-                } else {
-                    scrollToTopBtn.style.display = 'none';
-                }
-            };
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
-            const scrollToTop = () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            };
+    const handleEditMessageInModal = (newText) => {
+        setModalContent(prevContent => ({ ...prevContent, text: newText }));
+    };
 
-            const openModal = (text, edit = false, categoryId = null, messageIndex = null) => {
-                setModalContent({ text, categoryId, messageIndex });
-                setIsModalOpen(true);
-            };
+    const saveEditedMessage = () => {
+        const { categoryId, messageIndex, text } = modalContent;
+        
+        const request = indexedDB.open("MessagesDB", 2);
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction("categories", "readwrite");
+            const objectStore = transaction.objectStore("categories");
+            const getCategoryRequest = objectStore.get(categoryId);
 
-            const closeModal = () => {
-                setIsModalOpen(false);
-            };
+            getCategoryRequest.onsuccess = () => {
+                const category = getCategoryRequest.result;
+                category.messages[messageIndex].text = text;
+                const updateRequest = objectStore.put(category);
 
-            const handleEditMessageInModal = (newText) => {
-                setModalContent(prevContent => ({ ...prevContent, text: newText }));
-            };
+                updateRequest.onsuccess = () => {
+                    setCategories(prevCategories => {
+                        const updatedCategories = prevCategories.map(cat => {
+                            if (cat.id === categoryId) {
+                                return {
+                                    ...cat,
+                                    messages: cat.messages.map((msg, idx) => 
+                                        idx === messageIndex ? { ...msg, text } : msg
+                                    )
+                                };
+                            }
+                            return cat;
+                        });
+                        return updatedCategories;
+                    });
 
-            const saveEditedMessage = () => {
-    const { categoryId, messageIndex, text } = modalContent;
-    
-    const request = indexedDB.open("MessagesDB", 1);
-    request.onsuccess = (event) => {
-        const db = event.target.result;
-        const transaction = db.transaction("categories", "readwrite");
-        const objectStore = transaction.objectStore("categories");
-        const getCategoryRequest = objectStore.get(categoryId);
-
-        getCategoryRequest.onsuccess = () => {
-            const category = getCategoryRequest.result;
-            category.messages[messageIndex].text = text;
-            const updateRequest = objectStore.put(category);
-
-            updateRequest.onsuccess = () => {
-                // Atualiza o estado de forma imutável
-                setCategories(prevCategories => {
-                    const updatedCategories = prevCategories.map(cat => {
-                        if (cat.id === categoryId) {
+                    setSelectedCategory(prev => {
+                        if (prev.id === categoryId) {
+                            const updatedMessages = [...prev.messages];
+                            updatedMessages[messageIndex] = {
+                                ...updatedMessages[messageIndex],
+                                text
+                            };
                             return {
-                                ...cat,
-                                messages: cat.messages.map((msg, idx) => 
-                                    idx === messageIndex ? { ...msg, text } : msg
-                                )
+                                ...prev,
+                                messages: updatedMessages
                             };
                         }
-                        return cat;
+                        return prev;
                     });
-                    return updatedCategories;
-                });
 
-                // Atualiza a categoria selecionada
-                setSelectedCategory(prev => {
-                    if (prev.id === categoryId) {
-                        const updatedMessages = [...prev.messages];
-                        updatedMessages[messageIndex] = {
-                            ...updatedMessages[messageIndex],
-                            text
-                        };
-                        return {
-                            ...prev,
-                            messages: updatedMessages
-                        };
-                    }
-                    return prev;
-                });
-
-                showToast("Mensagem salva com sucesso!");
-                setIsModalOpen(false);
-            };
-
-            updateRequest.onerror = () => {
-                console.error("Erro ao atualizar a mensagem no IndexedDB");
-                showToast("Erro ao salvar a mensagem.", true);
+                    showToast("Mensagem salva com sucesso!");
+                    setIsModalOpen(false);
+                };
             };
         };
     };
 
-    request.onerror = () => {
-        console.error("Erro ao abrir o IndexedDB");
-        showToast("Erro ao abrir o banco de dados.", true);
+    // Funções utilitárias
+    const copyMessage = (text) => {
+        const finalText = text.replace('[nome]', name || 'cliente');
+        navigator.clipboard.writeText(finalText);
+        showToast("Mensagem copiada!");
     };
-};
 
-            const showToast = (message, isError = false) => {
-                const toast = document.getElementById('toast');
-                toast.textContent = message;
-                toast.style.background = isError ? '#e74c3c' : '#25D366';
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2000);
-            };
-
-            React.useEffect(() => {
-                window.addEventListener('scroll', handleScroll);
-                return () => window.removeEventListener('scroll', handleScroll);
-            }, []);
-
-            return (
-                <>
-                    <div className="header">
-                        <input
-                            className="input"
-                            placeholder="Nome do Cliente"
-                            value={name}
-                            onChange={e => setName(e.target.value)}
-                            autoFocus
-                        />
-                        <input
-                            className="input"
-                            placeholder="WhatsApp"
-                            value={phone}
-                            onChange={e => setPhone(e.target.value.replace(/\D/g, '').replace(/^(\d{2})(\d)/g, '($1) $2').replace(/(\d)(\d{4})$/, '$1-$2'))}
-                        />
-                    </div>
-
-                    <div className="scroll-container">
-                        {Object.values(categories).map(category => (
-                            <div 
-                                key={category.id} 
-                                className="message-card"
-                                onClick={() => setSelectedCategory(category)}
-                            >
-                                <div style={{fontSize: '16px'}}>{category.icon}</div>
-                                <h3>{category.title}</h3>
-                                <div>Acessar →</div>
-                            </div>
-                        ))}
-                    </div>
-
-                    {selectedCategory && (
-                        <div className="message-list container">
-                            <button className="back-btn" onClick={() => setSelectedCategory(null)}>
-                                <i className="fas fa-arrow-left"></i> Voltar
-                            </button>
-                            <h2 style={{color: '#004d40', marginBottom: '20px'}}>
-                                {selectedCategory.title}
-                            </h2>
-                            {selectedCategory.messages.map((message, index) => (
-                                <div key={index} className="message-item" onClick={() => openModal(message.text, true, selectedCategory.id, index)}>
-                                    <h3 style={{marginBottom: '10px', fontSize: '18px'}}>{message.title}</h3>
-                                    <div className="message-preview">{message.text}</div>
-                                    <div className="button-group">
-                                        <button 
-                                            className="btn btn-copy"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                copyMessage(message.text);
-                                            }}
-                                        >
-                                            <i className="fas fa-copy"></i> Copiar
-                                        </button>
-                                        <button 
-                                            className="btn btn-whats"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                sendWhatsApp(message.text);
-                                            }}
-                                        >
-                                            <i className="fab fa-whatsapp"></i> WhatsApp
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                    <div id="scrollToTop" className="scroll-to-top" onClick={scrollToTop}>
-                        <i className="fas fa-arrow-up"></i>
-                    </div>
-
-                    {isModalOpen && (
-                        <div className="modal-overlay" onClick={closeModal}>
-                            <div className="modal-content" onClick={e => e.stopPropagation()}>
-                                <div className="modal-header">
-                                    <span className="modal-title">Editar Mensagem</span>
-                                    <button className="modal-close" onClick={closeModal}>&times;</button>
-                                </div>
-                                <div className="modal-body">
-                                    <textarea
-                                        className="input"
-                                        value={modalContent.text}
-                                        onChange={(e) => handleEditMessageInModal(e.target.value)}
-                                        style={{ height: 'calc(100vh - 250px)', width: '100%' }}
-                                    />
-                                </div>
-                                <div className="button-group">
-                                    <button className="btn btn-success" onClick={saveEditedMessage}>Salvar</button>
-                                    <button className="btn btn-danger" onClick={closeModal}>Fechar</button>
-                                    <button className="btn btn-whats" onClick={() => sendWhatsApp(modalContent.text)}>
-                                        <i className="fab fa-whatsapp"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </>
-            );
+    const sendWhatsApp = (text) => {
+        const cleanPhone = phone.replace(/\D/g, '');
+        if (cleanPhone.length < 11) {
+            alert('Por favor, insira um número de telefone válido com DDD');
+            return;
         }
+        const finalText = text.replace('[nome]', name || 'cliente');
+        window.location.href = `https://wa.me/55${cleanPhone}?text=${encodeURIComponent(finalText)}`;
+    };
 
-        ReactDOM.render(<App />, document.getElementById('root'));
+    const showToast = (message) => {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+    };
+
+    const handleScroll = () => {
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        if (window.scrollY > 200) {
+            scrollToTopBtn.style.display = 'block';
+        } else {
+            scrollToTopBtn.style.display = 'none';
+        }
+    };
+
+    React.useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    return (
+        <>
+            <div className="header">
+                <input
+                    className="input"
+                    placeholder="Nome do Cliente"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    autoFocus
+                />
+                <input
+                    className="input"
+                    placeholder="WhatsApp"
+                    value={phone}
+                    onChange={e => setPhone(e.target.value.replace(/\D/g, '').replace(/^(\d{2})(\d)/g, '($1) $2').replace(/(\d)(\d{4})$/, '$1-$2'))}
+                />
+            </div>
+
+            <div className="scroll-container">
+                {Object.values(categories).map(category => (
+                    <div 
+                        key={category.id} 
+                        className="message-card"
+                        onClick={() => setSelectedCategory(category)}
+                    >
+                        <div style={{fontSize: '16px'}}>{category.icon}</div>
+                        <h3>{category.title}</h3>
+                        <div>Acessar →</div>
+                    </div>
+                ))}
+            </div>
+
+            {pinnedMessages.length > 0 && !selectedCategory && (
+                <div className="message-list container">
+                    <h3 style={{color: '#004d40', marginBottom: '15px'}}>
+                        Mensagens Fixadas <span className="pinned-badge">{pinnedMessages.length}</span>
+                    </h3>
+                    {pinnedMessages.map((pinnedMsg) => (
+                        <div key={pinnedMsg.id} className="message-item">
+                            <div className="message-header">
+                                <h3 style={{fontSize: '18px'}}>
+                                    {pinnedMsg.message.title}
+                                </h3>
+                                <button 
+                                    className="pin-btn active"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        togglePin(pinnedMsg.message, pinnedMsg.categoryId);
+                                    }}
+                                >
+                                    <i className="fas fa-star"></i>
+                                </button>
+                            </div>
+                            <div 
+                                className="message-preview"
+                                onClick={() => openModal(pinnedMsg.message.text, true, pinnedMsg.categoryId, null)}
+                            >
+                                {pinnedMsg.message.text}
+                            </div>
+                            <div className="button-group">
+                                <button 
+                                    className="btn btn-copy"
+                                    onClick={() => copyMessage(pinnedMsg.message.text)}
+                                >
+                                    <i className="fas fa-copy"></i> Copiar
+                                </button>
+                                <button 
+                                    className="btn btn-whats"
+                                    onClick={() => sendWhatsApp(pinnedMsg.message.text)}
+                                >
+                                    <i className="fab fa-whatsapp"></i> WhatsApp
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {selectedCategory && (
+                <div className="message-list container">
+                    <button className="back-btn" onClick={() => setSelectedCategory(null)}>
+                        <i className="fas fa-arrow-left"></i> Voltar
+                    </button>
+                    <h2 style={{color: '#004d40', marginBottom: '20px'}}>
+                        {selectedCategory.title}
+                    </h2>
+                    {selectedCategory.messages.map((message, index) => (
+                        <div key={index} className="message-item">
+                            <div className="message-header">
+                                <h3 style={{fontSize: '18px'}}>
+                                    {message.title}
+                                </h3>
+                                <button 
+                                    className={`pin-btn ${pinnedMessages.some(pm => 
+                                        pm.messageId === `${selectedCategory.id}-${message.title}`
+                                    ) ? 'active' : ''}`}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        togglePin(message, selectedCategory.id);
+                                    }}
+                                >
+                                    <i className="fas fa-star"></i>
+                                </button>
+                            </div>
+                            <div 
+                                className="message-preview"
+                                onClick={() => openModal(message.text, true, selectedCategory.id, index)}
+                            >
+                                {message.text}
+                            </div>
+                            <div className="button-group">
+                                <button 
+                                    className="btn btn-copy"
+                                    onClick={() => copyMessage(message.text)}
+                                >
+                                    <i className="fas fa-copy"></i> Copiar
+                                </button>
+                                <button 
+                                    className="btn btn-whats"
+                                    onClick={() => sendWhatsApp(message.text)}
+                                >
+                                    <i className="fab fa-whatsapp"></i> WhatsApp
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {isModalOpen && (
+                <div className="modal-overlay" onClick={closeModal}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <span className="modal-title">Editar Mensagem</span>
+                            <button className="modal-close" onClick={closeModal}>&times;</button>
+                        </div>
+                        <div className="modal-body">
+                            <textarea
+                                className="input"
+                                value={modalContent.text}
+                                onChange={(e) => handleEditMessageInModal(e.target.value)}
+                                style={{ height: 'calc(100vh - 250px)', width: '100%' }}
+                            />
+                        </div>
+                        <div className="button-group">
+                            <button className="btn btn-success" onClick={saveEditedMessage}>Salvar</button>
+                            <button className="btn btn-danger" onClick={closeModal}>Fechar</button>
+                            <button className="btn btn-whats" onClick={() => sendWhatsApp(modalContent.text)}>
+                                <i className="fab fa-whatsapp"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
+    );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+
     </script>
 </body>
 </html>
