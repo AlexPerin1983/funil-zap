@@ -438,7 +438,385 @@
                 const objectStore = db.createObjectStore("categories", { keyPath: "id" });
                 objectStore.transaction.oncomplete = () => {
                     const categoriesObjectStore = db.transaction("categories", "readwrite").objectStore("categories");
+
+
+
                     // Suas categorias existentes serão adicionadas aqui
+                    const initialCategories = [
+    {
+        id: "greetings",
+        title: "Mensagens Saudação",
+        icon: "👋",
+        sortOrder: 1,
+        messages: [
+          
+
+            {
+            title: "Boas-vindas Cordial",
+            icon: "😊",
+            text: "Olá! Tudo bem com você? É um prazer contar com sua presença. Estamos aqui para entender suas necessidades e oferecer as melhores soluções em películas. Como podemos ser úteis hoje?"
+        },
+        {
+            title: "Apresentação Pessoal",
+            icon: "🤝",
+            text: "[nome] falando da [Nome da Empresa]! Tudo bem com Você? Sabemos que cada cliente é único, e estamos prontos para ouvir e atender às suas necessidades. Em que podemos ajudar?"
+        },
+        {
+            title: "Agradecimento Inicial",
+            icon: "🙏",
+            text: "Agradeço por entrar em contato conosco. Ta tudo bem com você hoje? quero poder prestar um exelente atendimento. Por favor, compartilhe como podemos ajudar."
+        },
+        {
+            title: "Boas-vindas Profissional",
+            icon: "💼",
+            text: "Feliz em receber sua mensagem. Sou [nome] pode contar comigo para esclarecer dúvidas e oferecer solução eficaz para você. Como podemos ser úteis hoje?"
+        },
+        {
+            title: "Atendimento Personalizado",
+            icon: "🌟",
+            text: "Entendemos a importância de um atendimento personalizado e estamos aqui para garantir sua satisfação. me chamo [nome] Em que posso ser útil para você hoje?"
+        },
+        {
+            title: "Saudação com Foco em Soluções",
+            icon: "💫",
+            text: "Olá! É um prazer receber sua mensagem. Estamos aqui para entender suas necessidades e oferecer as melhores soluções em películas. Como podemos colaborar hoje?"
+        },
+        {
+                title: "Anti-Vácuo",
+                icon: "✨",
+                text: "Oi [nome], percebi que não obtive retorno. Ainda posso ajudar com informações sobre nossas películas?"
+            },
+            {
+                title: "Anti-Vácuo agressivo",
+                icon: "⚡",
+                text: "Importante! [nome], não quero que você perca a oportunidade de conhecer nossas soluções em películas. Quando podemos conversar?"
+            },
+            {
+                title: "Encerramento de tentativa",
+                icon: "🔚",
+                text: "Entendo que talvez agora não seja o momento ideal. Ficarei à disposição quando precisar de informações sobre películas. Tenha um ótimo dia!"
+            },
+        
+        // ... outras mensagens
+        ]
+    },
+    {
+        id: "indicacao",
+        title: "INDICAÇÃO",
+        icon: "⚡",
+        sortOrder: 2,
+        messages: [
+            {
+                title: "Abordagem Inicial - Cliente Indicado",
+                text: "Oi [nome],\n\nTudo bem? A [nome da pessoa que indicou] me passou o seu contato. Meu nome é Nathan. Ela me indicou seu contato, eu trabalho com transformação de negócio e aumento de faturamento para empreendedores através das redes sociais."
+            }
+
+
+
+            // ... outras mensagens
+        ]
+    },
+
+    {
+    id: "perguntas",
+    title: "Perguntas",
+    icon: "❓",
+    sortOrder: 4,
+    messages: [
+        {
+            title: "Perguntas Vencedoras",
+            icon: "🎯",
+            text: "Qual é o principal motivo que te fez buscar películas neste momento? Isso me ajudará a oferecer a melhor solução para você."
+        },
+        {
+            title: "Demonstrar interesse e atenção",
+            icon: "👂",
+            text: "Entendi sua necessidade. Me conte mais sobre [aspecto mencionado pelo cliente], assim posso te ajudar de forma mais específica."
+        },
+        {
+            title: "Interesse no problema do cliente",
+            icon: "🤝",
+            text: "Compreendo sua situação com [problema mencionado]. Já ajudamos muitos clientes com desafios similares. Posso te mostrar algumas soluções?"
+        },
+        {
+            title: "Script Cliente Fala de Preço e Cita Concorrência",
+            icon: "💰",
+            text: "Entendo sua preocupação com o investimento. Além do preço, oferecemos [benefícios exclusivos] que fazem toda diferença. Posso te mostrar?"
+        },
+        {
+            title: "Cliente Sem Tempo",
+            icon: "⏰",
+            text: "Sei que seu tempo é valioso. Posso te apresentar rapidamente nossas principais soluções em apenas 5 minutos. O que acha?"
+        },
+        {
+            title: "Mandar Depoimento de Outros Clientes",
+            icon: "⭐",
+            text: "Olha só o que nossos clientes estão falando sobre nossos serviços: [depoimento]. Posso te mostrar mais casos de sucesso similares ao que você procura?"
+        }
+    ]
+},
+{
+    id: "encantamento_cliente",
+    title: "Encantamento do cliente",
+    icon: "✨",
+    sortOrder: 5,
+    messages: [
+        {
+            title: "Demonstrar interesse e atenção",
+            icon: "🎯",
+            text: "Como está sendo sua experiência até agora? Há algo específico que você gostaria de saber mais a respeito?"
+        },
+        {
+            title: "Interesse no problema do cliente",
+            icon: "🤝",
+            text: "Percebo que [situação específica] é importante para você. Posso te explicar como nossas soluções podem ajudar especificamente nesse aspecto?"
+        },
+        {
+            title: "Script Cliente Fala de Preço e Cita Concorrência",
+            icon: "💎",
+            text: "Entendo sua comparação. Deixa eu te mostrar o que faz nosso serviço ser um investimento que vale a pena: [diferenciais]. O que acha?"
+        },
+        {
+            title: "Cliente Sem Tempo",
+            icon: "⚡",
+            text: "Vou ser bem objetivo(a) para otimizar seu tempo. Aqui está o que precisa saber: [pontos principais]. Podemos avançar?"
+        },
+        {
+            title: "Mandar Depoimento de Outros Clientes",
+            icon: "🌟",
+            text: "Gostaria de compartilhar a experiência de um cliente que tinha uma necessidade parecida com a sua: [depoimento relevante]. O que achou?"
+        },
+        {
+            title: "Script Mensagem de Ausência",
+            icon: "📝",
+            text: "Estou temporariamente ausente, mas retorno seu contato em breve para garantir o melhor atendimento possível. Agradeço sua compreensão!"
+        },
+        {
+            title: "Feedback de Satisfação",
+            icon: "📊",
+            text: "Como foi sua experiência com nosso serviço até agora? Seu feedback é muito importante para continuarmos melhorando sempre!"
+        }
+    ]
+},
+{
+        id: "agendamento",
+        title: "Agendamento",
+        icon: "📅",
+        sortOrder: 2,
+        messages: [
+            {
+                title: "Agendar horário",
+                icon: "⏰",
+                text: "Que ótimo que você tem interesse! Temos horários disponíveis para [data]. Qual seria melhor para você?"
+            },
+            {
+                title: "Cliente desmarcou",
+                icon: "❌",
+                text: "Entendo que imprevistos acontecem! Podemos remarcar para outro horário que seja mais conveniente para você. Que tal [sugestão de nova data]?"
+            },
+            {
+                title: "Cliente furou",
+                icon: "⚠️",
+                text: "Notei que não conseguimos nos encontrar no horário marcado. Gostaria de remarcar para um horário mais conveniente?"
+            },
+            {
+                title: "Pós reunião/consulta",
+                icon: "✅",
+                text: "Foi um prazer te atender hoje! Espero que tenha gostado de nossas soluções. Estou à disposição para qualquer dúvida adicional."
+            }
+        ]
+    },
+
+    {
+        id: "lembrete",
+        title: "Lembrete",
+        icon: "🔔",
+        sortOrder: 3,
+        messages: [
+            {
+                title: "Lembrete de agendamento anti furo",
+                icon: "📝",
+                text: "Olá [nome]! Passando para confirmar nosso horário amanhã às [horário]."
+            },
+            {
+                title: "Lembrete por dia cliente novo",
+                icon: "🆕",
+                text: "Olá [nome]! Lembrando do nosso compromisso hoje às [horário]. Até mais!"
+            },
+            {
+                title: "Lembrete agendamento cliente antigo",
+                icon: "👥",
+                text: "Oi [nome]! Só vim confirmar nosso compromisso de hoje às [data/hora]"
+            }
+        ]
+    },
+
+    {
+    id: "reativacao",
+    title: "Reativação",
+    icon: "🔄",
+    sortOrder: 6,
+    messages: [
+        {
+            title: "Cliente que não respondeu há algum tempo",
+            icon: "⏰",
+            text: "Olá [nome]! Faz um tempo que não nos falamos e queria saber como você está. Caso ainda tenha interesse em nossas películas, estou à disposição para ajudar!"
+        },
+        {
+            title: "Cliente parou de ir",
+            icon: "🔙",
+            text: "Oi [nome], notei que faz um tempo desde sua última visita. Está tudo bem? Temos novidades em películas que podem te interessar. Posso te contar mais sobre?"
+        },
+        {
+            title: "Cliente pediu orçamento e não respondeu",
+            icon: "💼",
+            text: "Olá [nome]! Lembra do orçamento que fizemos para você? Ainda estou à disposição para esclarecer qualquer dúvida e ajudar você a fazer o melhor investimento em películas."
+        },
+    ]
+},
+
+{
+    id: "pos_venda",
+    title: "Pós venda",
+    icon: "🎯",
+    sortOrder: 7,
+    messages: [
+        {
+            title: "Pedir avaliação sobre o produto ou serviço",
+            icon: "⭐",
+            text: "Olá [nome]! Como foi sua experiência com nossas películas? Seu feedback é muito importante para nós. Poderia compartilhar sua opinião? Isso nos ajuda a melhorar sempre!"
+        },
+        {
+            title: "Pedir avaliação no Google",
+            icon: "📱",
+            text: "Oi [nome]! Sua opinião é muito valiosa para nós. Se puder, gostaria que compartilhasse sua experiência com nossa empresa no Google. Posso te enviar o link?"
+        },
+        {
+            title: "Pedir avaliação no TripAdvisor",
+            icon: "✈️",
+            text: "Olá [nome]! Que tal compartilhar sua experiência conosco no TripAdvisor? Sua avaliação ajuda outros clientes a conhecerem nosso trabalho. Posso enviar o link?"
+        },
+        {
+            title: "Pedir depoimento em vídeo",
+            icon: "🎥",
+            text: "Oi [nome]! Sua satisfação com nosso serviço nos deixou muito felizes. Gostaria de gravar um breve depoimento em vídeo contando sua experiência? Seria incrível!"
+        },
+        {
+            title: "Oferecer brinde para avaliação",
+            icon: "🎁",
+            text: "Olá [nome]! Para agradecer sua confiança em nosso trabalho, gostaríamos de oferecer um brinde especial em troca de sua avaliação sincera. O que acha?"
+        },
+        {
+            title: "Acompanhamento pós-instalação",
+            icon: "✅",
+            text: "Oi [nome]! Como está a película que instalamos? Está tudo conforme suas expectativas? Estou à disposição para qualquer ajuste ou dúvida que surgir!"
+        }
+    ]
+},
+
+
+{
+    id: "google_reviews",
+    title: "Avaliações Google",
+    icon: "⭐",
+    sortOrder: 8,
+    messages: [
+        {
+            title: "Solicitar Avaliação Simples",
+            icon: "📱",
+            text: "Oi [nome]! Sua opinião é muito importante para nós. Se puder nos avaliar no Google, ficaremos muito gratos! Aqui está o link: [link do Google]"
+        },
+        {
+            title: "Pedido Detalhado de Avaliação",
+            icon: "🌟",
+            text: "Olá [nome]! Ficamos muito felizes em te atender. Se possível, poderia compartilhar sua experiência com nossa empresa no Google? Sua avaliação ajuda outros clientes a nos encontrarem. Link: [link do Google]"
+        },
+        {
+            title: "Avaliação com Incentivo",
+            icon: "🎁",
+            text: "Oi [nome]! Para agradecer sua confiança, preparamos um desconto especial na sua próxima visita quando você compartilhar sua experiência no Google. Posso te enviar o link?"
+        },
+        {
+            title: "Lembrete de Avaliação",
+            icon: "🔔",
+            text: "Olá [nome]! Passando para lembrar sobre a avaliação no Google que conversamos. Sua opinião é fundamental para continuarmos melhorando! Aqui está o link novamente: [link do Google]"
+        },
+        {
+            title: "Agradecimento por Avaliar",
+            icon: "🙏",
+            text: "Muito obrigado por nos avaliar no Google, [nome]! Seu feedback é muito valioso e nos ajuda a melhorar sempre. Conte sempre conosco!"
+        },
+        {
+            title: "Pós Avaliação Positiva",
+            icon: "💫",
+            text: "Obrigado pela excelente avaliação, [nome]! Ficamos muito felizes em saber que sua experiência foi positiva. Continuaremos trabalhando para manter esse nível de qualidade!"
+        },
+        {
+            title: "Feedback para Melhorias",
+            icon: "📝",
+            text: "Olá [nome]! Notamos sua avaliação e gostaríamos de entender melhor como podemos melhorar nossos serviços. Poderia nos dar mais detalhes sobre sua experiência?"
+        },
+        {
+            title: "Convite para Nova Visita",
+            icon: "🎯",
+            text: "Obrigado por nos avaliar, [nome]! Como agradecimento, preparamos uma condição especial para sua próxima visita. Quando podemos agendar?"
+        }
+    ]
+},
+
+{
+    id: "objecao_preco",
+    title: "Cliente Fala do Preço",
+    icon: "💰",
+    sortOrder: 9,
+    messages: [
+        {
+            title: "Valorização do Investimento",
+            icon: "💎",
+            text: "Entendo sua preocupação com o investimento, [nome]. Nossa película tem [garntia] e bloqueias até [85%] do calor, gerando economia de até [30%] na energia. A longo prazo, é um investimento que se paga. Posso te mostrar alguns casos reais de economia?"
+        },
+        {
+            title: "Comparação com Concorrência",
+            icon: "⚖️",
+            text: "Compreendo que existam opções mais baratas, [nome]. Porém, nossas películas são [justificativa importadas], com tecnologia de ponta e [garantia vitalícia]. Além disso, oferecemos instalação profissional e suporte pós-venda"
+        },
+        {
+            title: "Condições de Pagamento",
+            icon: "💳",
+            text: "Olha [nome], para justificar seu investimento, podemos trazer diversas formas de pagamento: parcelamento em até [12x], desconto especial à vista, e até opção de PIX. Qual dessas condições seria mais confortável para você hoje?"
+        },
+        {
+            title: "Foco no Benefício",
+            icon: "🎯",
+            text: "Entendo sua preocupação, [nome]. Pense que essa película vai proteger seu ambiente por muitos anos, trazendo conforto térmico, economia de energia e proteção para sua família"
+        },
+        {
+            title: "Promoção Limitada",
+            icon: "⚡",
+            text: "Você tem razão em analisar o investimento, [nome]. E por isso quero te ajudar: consegui uma condição especial de [15]% em sua instalação. Posso garantir essa condição para você?"
+        },
+        {
+            title: "Valor Agregado",
+            icon: "✨",
+            text: "Além da película em si, [nome], você recebe: instalação profissional, garantia vitalícia e acompanhamento pós-venda"
+        },
+        {
+            title: "Fechamento com Urgência",
+            icon: "🔥",
+            text: "Entendo sua análise de preço, [nome]. Justamente por isso separei uma condição especial para você: além do desconto de [20]%, você ainda leva [bônus/brinde: caneca, caneta, flanela]. Mas preciso da sua resposta hoje. Podemos apertar as mãos?"
+        },
+    ]
+},
+
+    // ... outras categorias
+];
+
+// Adiciona cada categoria ao banco de dados
+initialCategories.forEach(category => {
+    categoriesObjectStore.add(category);
+});
+
+
                 };
             }
             
