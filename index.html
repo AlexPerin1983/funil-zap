@@ -443,8 +443,8 @@
 
                     // Suas categorias existentes serão adicionadas aqui
                     const initialCategories = [
-    {
-        id: "greetings",
+    {    //SAUDAÇÃO
+        id: "saudacao",
         title: "Mensagens Saudação",
         icon: "👋",
         sortOrder: 1,
@@ -479,7 +479,7 @@
         {
             title: "Saudação com Foco em Soluções",
             icon: "💫",
-            text: "Olá! É um prazer receber sua mensagem. Estamos aqui para entender suas necessidades e oferecer as melhores soluções em películas. Como podemos colaborar hoje?"
+            text: "Olá, sou [Seu Nome], da [Nome da Empresa]. Espero que esteja bem. Como posso ajudar você hoje?"
         },
         {
                 title: "Anti-Vácuo",
@@ -500,7 +500,7 @@
         // ... outras mensagens
         ]
     },
-    {
+    {    //INDICAÇÃO
         id: "indicacao",
         title: "INDICAÇÃO",
         icon: "⚡",
@@ -512,12 +512,11 @@
             }
 
 
-
             // ... outras mensagens
         ]
     },
-
-    {
+                   
+    {       //PERGUNTAS
     id: "perguntas",
     title: "Perguntas",
     icon: "❓",
@@ -538,11 +537,7 @@
             icon: "🤝",
             text: "Compreendo sua situação com [problema mencionado]. Já ajudamos muitos clientes com desafios similares. Posso te mostrar algumas soluções?"
         },
-        {
-            title: "Script Cliente Fala de Preço e Cita Concorrência",
-            icon: "💰",
-            text: "Entendo sua preocupação com o investimento. Além do preço, oferecemos [benefícios exclusivos] que fazem toda diferença. Posso te mostrar?"
-        },
+      
         {
             title: "Cliente Sem Tempo",
             icon: "⏰",
@@ -555,7 +550,9 @@
         }
     ]
 },
-{
+      
+
+{         //ENCANTAMENTO CLIENTE
     id: "encantamento_cliente",
     title: "Encantamento do cliente",
     icon: "✨",
@@ -570,11 +567,6 @@
             title: "Interesse no problema do cliente",
             icon: "🤝",
             text: "Percebo que [situação específica] é importante para você. Posso te explicar como nossas soluções podem ajudar especificamente nesse aspecto?"
-        },
-        {
-            title: "Script Cliente Fala de Preço e Cita Concorrência",
-            icon: "💎",
-            text: "Entendo sua comparação. Deixa eu te mostrar o que faz nosso serviço ser um investimento que vale a pena: [diferenciais]. O que acha?"
         },
         {
             title: "Cliente Sem Tempo",
@@ -598,7 +590,10 @@
         }
     ]
 },
-{
+
+                    
+
+{           //AGENDAMENTO
         id: "agendamento",
         title: "Agendamento",
         icon: "📅",
@@ -627,7 +622,10 @@
         ]
     },
 
-    {
+
+                    
+
+    {         //LEMBRETE
         id: "lembrete",
         title: "Lembrete",
         icon: "🔔",
@@ -651,7 +649,10 @@
         ]
     },
 
-    {
+
+                        
+
+    {      //REATIVAÇÃO
     id: "reativacao",
     title: "Reativação",
     icon: "🔄",
@@ -675,7 +676,9 @@
     ]
 },
 
-{
+
+                     
+{     //POS VENDA
     id: "pos_venda",
     title: "Pós venda",
     icon: "🎯",
@@ -690,11 +693,6 @@
             title: "Pedir avaliação no Google",
             icon: "📱",
             text: "Oi [nome]! Sua opinião é muito valiosa para nós. Se puder, gostaria que compartilhasse sua experiência com nossa empresa no Google. Posso te enviar o link?"
-        },
-        {
-            title: "Pedir avaliação no TripAdvisor",
-            icon: "✈️",
-            text: "Olá [nome]! Que tal compartilhar sua experiência conosco no TripAdvisor? Sua avaliação ajuda outros clientes a conhecerem nosso trabalho. Posso enviar o link?"
         },
         {
             title: "Pedir depoimento em vídeo",
@@ -712,10 +710,10 @@
             text: "Oi [nome]! Como está a película que instalamos? Está tudo conforme suas expectativas? Estou à disposição para qualquer ajuste ou dúvida que surgir!"
         }
     ]
-},
+},   
 
 
-{
+{         //AVALIAÇÕES GOOGLE
     id: "google_reviews",
     title: "Avaliações Google",
     icon: "⭐",
@@ -764,21 +762,50 @@
     ]
 },
 
-{
+        
+{             //PROPOSTA ENVIADA              
+        id: "proposta",
+        title: "Proposta Enviada",
+        icon: "👋",
+        sortOrder: 9,
+        messages: [
+        {
+            title: "Primeira Mensagem (1-2 dias após a proposta)",
+            icon: "🔥",
+            text: "Oi [nome]! Passando para ver se teve a oportunidade de analisar nossa proposta de aplicação de película. Alguma dúvida sobre os detalhes, benefícios ou garantias? Estamos aqui para ajudar com o que precisar."
+        },
+
+        {
+            title: "Segunda Mensagem (3-5 dias após a proposta):",
+            icon: "🔥",
+            text: "Olá [nome], só para lembrar que as películas oferecidas estão disponíveis com garantia de qualidade e aplicação certificada. Isso significa que você pode contar com a durabilidade e eficácia comprovada do nosso serviço."
+        },
+
+        {
+            title: "Terceira Mensagem (após 7 dias)",
+            icon: "🔥",
+            text: "Oi [nome]! Queremos que você faça a escolha certa para seu projeto. Ficaremos felizes em ajudar com mais informações ou ajustar a proposta conforme suas necessidades. Conte conosco!"
+
+        },
+    ]
+},
+
+
+{       //PREÇO OBJEÇÕES
     id: "objecao_preco",
     title: "Cliente Fala do Preço",
     icon: "💰",
-    sortOrder: 9,
+    sortOrder: 19,
     messages: [
         {
             title: "Valorização do Investimento",
             icon: "💎",
-            text: "Entendo sua preocupação com o investimento, [nome]. Nossa película tem [garntia] e bloqueias até [85%] do calor, gerando economia de até [30%] na energia. A longo prazo, é um investimento que se paga. Posso te mostrar alguns casos reais de economia?"
+            text: "Compreendo que o investimento é uma consideração importante. Permita-me destacar que nossas películas são de alta qualidade, oferecendo benefícios como durabilidade, eficiência energética e proteção UV, o que proporciona economia a longo prazo"
         },
         {
-            title: "Comparação com Concorrência",
+            title: "Aplicação tembem conta",
             icon: "⚖️",
-            text: "Compreendo que existam opções mais baratas, [nome]. Porém, nossas películas são [justificativa importadas], com tecnologia de ponta e [garantia vitalícia]. Além disso, oferecemos instalação profissional e suporte pós-venda"
+            text: "Compreendo perfeitamente, mas você esta investindo não apenas na Película mas sim em um serviço de aplicação profissional, garantindo que a película desempenhe sua função de forma eficaz. Nossa empresa é reconhecida pela excelência no atendimento e pela satisfação dos clientes, o que justifica o valor do investimento."
         },
         {
             title: "Condições de Pagamento",
@@ -786,14 +813,14 @@
             text: "Olha [nome], para justificar seu investimento, podemos trazer diversas formas de pagamento: parcelamento em até [12x], desconto especial à vista, e até opção de PIX. Qual dessas condições seria mais confortável para você hoje?"
         },
         {
-            title: "Foco no Benefício",
+            title: "engendecendo nosso serviço",
             icon: "🎯",
-            text: "Entendo sua preocupação, [nome]. Pense que essa película vai proteger seu ambiente por muitos anos, trazendo conforto térmico, economia de energia e proteção para sua família"
+            text: "Entendemos o valor do investimento, e é justamente por isso que garantimos uma aplicação sem bolhas, sem falhas e com alta durabilidade. Nossos clientes são 100% Satisfeitos e sempre acabam indicando nosso serviço,"
         },
         {
             title: "Promoção Limitada",
             icon: "⚡",
-            text: "Você tem razão em analisar o investimento, [nome]. E por isso quero te ajudar: consegui uma condição especial de [15]% em sua instalação. Posso garantir essa condição para você?"
+            text: "Sabemos que existem opções mais baratas no mercado. No entanto, nossa empresa se destaca pela excelência no atendimento e pela utilização de materiais de alta qualidade. Nossa equipe é constantemente treinada para oferecer o melhor serviço, o que se reflete nas avaliações positivas de nossos clientes."
         },
         {
             title: "Valor Agregado",
@@ -807,6 +834,62 @@
         },
     ]
 },
+
+
+{     //CLIENTE COM MEDO
+        id: "medo",  
+        title: "AGINDO PELO MEDO DE UMA MA APLICAÇÃO ",
+        icon: "⚡",
+        sortOrder: 2,
+        messages: [
+            {
+                title: "Risco de Profissionais Inexperientes:",
+                text:"Sabemos que o mercado está cheio de opções, mas é importante escolher bem. Uma aplicação feita por alguém sem experiência pode resultar em problemas como bolhas, riscos no vidro, e até mesmo danos permanentes nos acabamentos. Aqui, garantimos um serviço impecável, feito por especialistas."
+
+            },
+            {
+                title: "Evite Resultados de Baixa Qualidade",
+                text:"Muitos clientes nos procuram após experiências ruins com outras empresas. Imagine se, em vez de uma película impecável, o resultado fosse uma aplicação cheia de bolhas ou um vidro riscado. Investir em qualidade evita transtornos e retrabalho."
+
+            },
+
+            {
+                title: "Prevenção de Danos e Segurança do Material",
+                text:"A aplicação de película exige cuidados técnicos para proteger cada detalhe do ambiente. Profissionais não capacitados podem acabar riscando o vidro, manchando as paredes, ou até danificando a estrutura ao redor. Com a gente, você evita qualquer preocupação: nossa equipe é treinada para garantir um resultado perfeito e seguro."
+
+            },
+            {
+                title: "Garantia de Acabamento Impecável",
+                text:"Aplicar películas exige não só técnica, mas também um compromisso com o acabamento e a segurança do espaço do cliente. Ao confiar em profissionais menos preparados, há um risco real de sujeira, marcas permanentes e acabamento mal feito. Aqui, garantimos que cada detalhe será tratado com o máximo cuidado."
+                },
+
+                {
+    title: "Histórias de Clientes que Escolheram Mal e Tiveram Prejuízo",
+    text: "Recentemente, um cliente nos procurou após uma experiência ruim com outro aplicador. O resultado foram bolhas e manchas permanentes no vidro, exigindo uma remoção completa e substituição da película. Com nossa experiência e cuidado, garantimos que o trabalho seja impecável desde o início, evitando esse tipo de retrabalho e custo adicional."
+},
+{
+    title: "Certificações e Treinamento da Equipe",
+    text: "Nossa equipe é treinada e certificada para evitar os problemas mais comuns na aplicação de películas, como riscos no vidro e manchas. Contamos com técnicas exclusivas que garantem uma instalação sem qualquer falha ou dano ao ambiente."
+},
+{
+    title: "Uso de Materiais e Equipamentos de Alta Qualidade",
+    text: "Diferente de aplicadores inexperientes que muitas vezes utilizam materiais inadequados, aqui utilizamos apenas películas de alta qualidade e equipamentos especializados que garantem um acabamento perfeito e duradouro. Trabalhar com o melhor é nossa garantia de um resultado superior."
+},
+{
+    title: "Política de Garantia e Satisfação do Cliente",
+    text: "Nosso compromisso é com a sua satisfação completa. Oferecemos uma política de garantia que cobre qualquer eventual problema, o que significa que, com nossa aplicação, você não corre o risco de surpresas desagradáveis como bolhas ou danos."
+},
+{
+    title: "Comparação com o Mercado",
+    text: "O barato muitas vezes sai caro. Aplicadores sem o devido conhecimento podem parecer vantajosos pelo preço, mas o risco de falhas, retrabalhos e até danos ao seu patrimônio é real. Nós investimos em capacitação e materiais de ponta para garantir um serviço impecável."
+}
+
+
+
+
+        ]
+     }
+
 
     // ... outras categorias
 ];
