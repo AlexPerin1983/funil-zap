@@ -3,12 +3,12 @@
     "name": "Aplicação Profissional de Mensagens ZapFilm-Pro",
     "icons": [
         {
-            "src": "icons/icon-192x192.png",
+            "src": "icons/Zap film 192.png",
             "type": "image/png",
             "sizes": "192x192"
         },
         {
-            "src": "icons/icon-512x512.png",
+            "src": "icons/Zap film 512.png",
             "type": "image/png",
             "sizes": "512x512"
         }
