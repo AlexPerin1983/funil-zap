@@ -4,13 +4,11 @@
     <!-- Metadados -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O poder da Comunicação</title>
+    <title>Aplicação Profissional de Mensagens</title>
 
+    <link rel="manifest" href="manifest.json">
 
-<link rel="manifest" href="manifest.json">
-
-<link rel="icon" href="icons/icon-zap192.png" sizes="192x192" type="image/png">
-
+    <link rel="icon" href="icons/icon-zap192.png" sizes="192x192" type="image/png">
 
     <!-- Bibliotecas e Fontes -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -132,10 +130,17 @@
             color: #555;
             font-size: 16px;
             transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .sidebar .category-list li a:hover {
             color: #007bff;
+        }
+
+        .sidebar .category-list li a .category-title {
+            flex: 1;
         }
 
         /* Conteúdo Principal */
@@ -516,7 +521,7 @@
 <body>
     <!-- Header -->
     <header class="header">
-        <div class="logo">ZapFim-Pro</div>
+        <div class="logo">ZapFilm-Pro</div>
         <i class="fas fa-bars menu-toggle" id="menuToggle"></i>
     </header>
 
@@ -539,7 +544,7 @@
 
         <!-- Conteúdo Principal -->
         <main class="content" id="mainContent">
-            <!-- O conteúdo será carregado dinamicamente -->
+            {/* React irá renderizar aqui */}
         </main>
     </div>
 
@@ -559,15 +564,12 @@
     <div class="toast" id="toast">Mensagem copiada!</div>
 
     <!-- Scripts -->
-    
     <!-- Bibliotecas -->
     <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-
-
- <!-- Registro do Service Worker -->
+       <!-- Registro do Service Worker -->
 <script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
@@ -580,517 +582,512 @@
     }
 </script>
 
-
     <!-- Script Personalizado -->
     <script type="text/babel">
-        
-   
         // Simulação de dados (Categorias e Mensagens)
         const categoriesData = [
-          
-            // SAUDAÇÃO
-{
-    id: "saudacao",
-    title: "Mensagens Saudação",
-    icon: "👋",
-    sortOrder: 1,
-    messages: [
-        {
-            id: 1,
-            title: "Boas-vindas Cordial",
-            icon: "😊",
-            text: "Olá! Tudo bem com você? É um prazer contar com sua presença. Estamos aqui para entender suas necessidades e oferecer as melhores soluções em películas. Como podemos ser úteis hoje?"
-        },
-        {
-            id: 2,
-            title: "Apresentação Pessoal",
-            icon: "🤝",
-            text: "[nome] falando da [Nome da Empresa]! Tudo bem com Você? Sabemos que cada cliente é único, e estamos prontos para ouvir e atender às suas necessidades. Em que podemos ajudar?"
-        },
-        {
-            id: 3,
-            title: "Agradecimento Inicial",
-            icon: "🙏",
-            text: "Agradeço por entrar em contato conosco. Tá tudo bem com você hoje? Quero poder prestar um excelente atendimento. Por favor, compartilhe como podemos ajudar."
-        },
-        {
-            id: 4,
-            title: "Boas-vindas Profissional",
-            icon: "💼",
-            text: "Feliz em receber sua mensagem. Sou [nome], pode contar comigo para esclarecer dúvidas e oferecer solução eficaz para você. Como podemos ser úteis hoje?"
-        },
-        {
-            id: 5,
-            title: "Atendimento Personalizado",
-            icon: "🌟",
-            text: "Entendemos a importância de um atendimento personalizado e estamos aqui para garantir sua satisfação. Me chamo [nome]. Em que posso ser útil para você hoje?"
-        },
-        {
-            id: 6,
-            title: "Saudação com Foco em Soluções",
-            icon: "💫",
-            text: "Olá, sou [Seu Nome], da [Nome da Empresa]. Espero que esteja bem. Como posso ajudar você hoje?"
-        },
-        {
-            id: 7,
-            title: "Anti-Vácuo",
-            icon: "✨",
-            text: "Oi [nome], percebi que não obtive retorno. Ainda posso ajudar com informações sobre nossas películas?"
-        },
-        {
-            id: 8,
-            title: "Anti-Vácuo agressivo",
-            icon: "⚡",
-            text: "Importante! [nome], não quero que você perca a oportunidade de conhecer nossas soluções em películas. Quando podemos conversar?"
-        },
-        {
-            id: 9,
-            title: "Encerramento de tentativa",
-            icon: "🔚",
-            text: "Entendo que talvez agora não seja o momento ideal. Ficarei à disposição quando precisar de informações sobre películas. Tenha um ótimo dia!"
-        }
-    ]
-},
-// INDICAÇÃO
-{
-    id: "indicacao",
-    title: "INDICAÇÃO",
-    icon: "⚡",
-    sortOrder: 2,
-    messages: [
-        {
-            id: 1,
-            title: "Abordagem Inicial - Cliente Indicado",
-            icon: "⚡",
-            text: "Oi [nome],\n\nTudo bem? A [nome da pessoa que indicou] me passou o seu contato. Meu nome é Nathan. Ela me indicou seu contato, eu trabalho com transformação de negócio e aumento de faturamento para empreendedores através das redes sociais."
-        }
-        // ... outras mensagens
-    ]
-},
-// PERGUNTAS
-{
-    id: "perguntas",
-    title: "Perguntas Importantes",
-    icon: "❓",
-    sortOrder: 4,
-    messages: [
-        {
-            id: 1,
-            title: "Perguntas Vencedoras",
-            icon: "🎯",
-            text: "Qual é o principal motivo que te fez buscar películas neste momento? Isso me ajudará a oferecer a melhor solução para você."
-        },
-        {
-            id: 2,
-            title: "Demonstrar interesse e atenção",
-            icon: "👂",
-            text: "Entendi sua necessidade. Me conte mais sobre [aspecto mencionado pelo cliente], assim posso te ajudar de forma mais específica."
-        },
-        {
-            id: 3,
-            title: "Interesse no problema do cliente",
-            icon: "🤝",
-            text: "Compreendo sua situação com [problema mencionado]. Já ajudamos muitos clientes com desafios similares. Posso te mostrar algumas soluções?"
-        },
-        {
-            id: 4,
-            title: "Cliente Sem Tempo",
-            icon: "⏰",
-            text: "Sei que seu tempo é valioso. Posso te apresentar rapidamente nossas principais soluções em apenas 5 minutos. O que acha?"
-        },
-        {
-            id: 5,
-            title: "Mandar Depoimento de Outros Clientes",
-            icon: "⭐",
-            text: "Olha só o que nossos clientes estão falando sobre nossos serviços: [depoimento]. Posso te mostrar mais casos de sucesso similares ao que você procura?"
-        }
-    ]
-},
-// ENCANTAMENTO DO CLIENTE
-{
-    id: "encantamento_cliente",
-    title: "Encanta o cliente",
-    icon: "✨",
-    sortOrder: 5,
-    messages: [
-        {
-            id: 1,
-            title: "Demonstrar interesse e atenção",
-            icon: "🎯",
-            text: "Como está sendo sua experiência até agora? Há algo específico que você gostaria de saber mais a respeito?"
-        },
-        {
-            id: 2,
-            title: "Interesse no problema do cliente",
-            icon: "🤝",
-            text: "Percebo que [situação específica] é importante para você. Posso te explicar como nossas soluções podem ajudar especificamente nesse aspecto?"
-        },
-        {
-            id: 3,
-            title: "Cliente Sem Tempo",
-            icon: "⚡",
-            text: "Vou ser bem objetivo(a) para otimizar seu tempo. Aqui está o que precisa saber: [pontos principais]. Podemos avançar?"
-        },
-        {
-            id: 4,
-            title: "Mandar Depoimento de Outros Clientes",
-            icon: "🌟",
-            text: "Gostaria de compartilhar a experiência de um cliente que tinha uma necessidade parecida com a sua: [depoimento relevante]. O que achou?"
-        },
-        {
-            id: 5,
-            title: "Script Mensagem de Ausência",
-            icon: "📝",
-            text: "Estou temporariamente ausente, mas retorno seu contato em breve para garantir o melhor atendimento possível. Agradeço sua compreensão!"
-        },
-        {
-            id: 6,
-            title: "Feedback de Satisfação",
-            icon: "📊",
-            text: "Como foi sua experiência com nosso serviço até agora? Seu feedback é muito importante para continuarmos melhorando sempre!"
-        }
-    ]
-},
-// AGENDAMENTO
-{
-    id: "agendamento",
-    title: "Agendamento",
-    icon: "📅",
-    sortOrder: 2,
-    messages: [
-        {
-            id: 1,
-            title: "Agendar horário",
-            icon: "⏰",
-            text: "Que ótimo que você tem interesse! Temos horários disponíveis para [data]. Qual seria melhor para você?"
-        },
-        {
-            id: 2,
-            title: "Cliente desmarcou",
-            icon: "❌",
-            text: "Entendo que imprevistos acontecem! Podemos remarcar para outro horário que seja mais conveniente para você. Que tal [sugestão de nova data]?"
-        },
-        {
-            id: 3,
-            title: "Cliente furou",
-            icon: "⚠️",
-            text: "Notei que não conseguimos nos encontrar no horário marcado. Gostaria de remarcar para um horário mais conveniente?"
-        },
-        {
-            id: 4,
-            title: "Pós reunião/consulta",
-            icon: "✅",
-            text: "Foi um prazer te atender hoje! Espero que tenha gostado de nossas soluções. Estou à disposição para qualquer dúvida adicional."
-        }
-    ]
-},
-// LEMBRETE
-{
-    id: "lembrete",
-    title: "Lembrete",
-    icon: "🔔",
-    sortOrder: 3,
-    messages: [
-        {
-            id: 1,
-            title: "Lembrete de agendamento anti furo",
-            icon: "📝",
-            text: "Olá [nome]! Passando para confirmar nosso horário amanhã às [horário]."
-        },
-        {
-            id: 2,
-            title: "Lembrete por dia cliente novo",
-            icon: "🆕",
-            text: "Olá [nome]! Lembrando do nosso compromisso hoje às [horário]. Até mais!"
-        },
-        {
-            id: 3,
-            title: "Lembrete agendamento cliente antigo",
-            icon: "👥",
-            text: "Oi [nome]! Só vim confirmar nosso compromisso de hoje às [data/hora]."
-        }
-    ]
-},
-// REATIVAÇÃO
-{
-    id: "reativacao",
-    title: "Reativação contato",
-    icon: "🔄",
-    sortOrder: 6,
-    messages: [
-        {
-            id: 1,
-            title: "Cliente que não respondeu há algum tempo",
-            icon: "⏰",
-            text: "Olá [nome]! Faz um tempo que não nos falamos e queria saber como você está. Caso ainda tenha interesse em nossas películas, estou à disposição para ajudar!"
-        },
-        {
-            id: 2,
-            title: "Cliente parou de ir",
-            icon: "🔙",
-            text: "Oi [nome], notei que faz um tempo desde sua última visita. Está tudo bem? Temos novidades em películas que podem te interessar. Posso te contar mais sobre?"
-        },
-        {
-            id: 3,
-            title: "Cliente pediu orçamento e não respondeu",
-            icon: "💼",
-            text: "Olá [nome]! Lembra do orçamento que fizemos para você? Ainda estou à disposição para esclarecer qualquer dúvida e ajudar você a fazer o melhor investimento em películas."
-        }
-    ]
-},
-// PÓS VENDA
-{
-    id: "pos_venda",
-    title: "Pós venda",
-    icon: "🎯",
-    sortOrder: 7,
-    messages: [
-        {
-            id: 1,
-            title: "Pedir avaliação sobre o produto ou serviço",
-            icon: "⭐",
-            text: "Olá [nome]! Como foi sua experiência com nossas películas? Seu feedback é muito importante para nós. Poderia compartilhar sua opinião? Isso nos ajuda a melhorar sempre!"
-        },
-        {
-            id: 2,
-            title: "Pedir avaliação no Google",
-            icon: "📱",
-            text: "Oi [nome]! Sua opinião é muito valiosa para nós. Se puder, gostaria que compartilhasse sua experiência com nossa empresa no Google. Posso te enviar o link?"
-        },
-        {
-            id: 3,
-            title: "Pedir depoimento em vídeo",
-            icon: "🎥",
-            text: "Oi [nome]! Sua satisfação com nosso serviço nos deixou muito felizes. Gostaria de gravar um breve depoimento em vídeo contando sua experiência? Seria incrível!"
-        },
-        {
-            id: 4,
-            title: "Oferecer brinde para avaliação",
-            icon: "🎁",
-            text: "Olá [nome]! Para agradecer sua confiança em nosso trabalho, gostaríamos de oferecer um brinde especial em troca de sua avaliação sincera. O que acha?"
-        },
-        {
-            id: 5,
-            title: "Acompanhamento pós-instalação",
-            icon: "✅",
-            text: "Oi [nome]! Como está a película que instalamos? Está tudo conforme suas expectativas? Estou à disposição para qualquer ajuste ou dúvida que surgir!"
-        }
-    ]
-},
-// AVALIAÇÕES GOOGLE
-{
-    id: "google_reviews",
-    title: "Avaliações Google",
-    icon: "⭐",
-    sortOrder: 8,
-    messages: [
-        {
-            id: 1,
-            title: "Solicitar Avaliação Simples",
-            icon: "📱",
-            text: "Oi [nome]! Sua opinião é muito importante para nós. Se puder nos avaliar no Google, ficaremos muito gratos! Aqui está o link: [link do Google]"
-        },
-        {
-            id: 2,
-            title: "Pedido Detalhado de Avaliação",
-            icon: "🌟",
-            text: "Olá [nome]! Ficamos muito felizes em te atender. Se possível, poderia compartilhar sua experiência com nossa empresa no Google? Sua avaliação ajuda outros clientes a nos encontrarem. Link: [link do Google]"
-        },
-        {
-            id: 3,
-            title: "Avaliação com Incentivo",
-            icon: "🎁",
-            text: "Oi [nome]! Para agradecer sua confiança, preparamos um desconto especial na sua próxima visita quando você compartilhar sua experiência no Google. Posso te enviar o link?"
-        },
-        {
-            id: 4,
-            title: "Lembrete de Avaliação",
-            icon: "🔔",
-            text: "Olá [nome]! Passando para lembrar sobre a avaliação no Google que conversamos. Sua opinião é fundamental para continuarmos melhorando! Aqui está o link novamente: [link do Google]"
-        },
-        {
-            id: 5,
-            title: "Agradecimento por Avaliar",
-            icon: "🙏",
-            text: "Muito obrigado por nos avaliar no Google, [nome]! Seu feedback é muito valioso e nos ajuda a melhorar sempre. Conte sempre conosco!"
-        },
-        {
-            id: 6,
-            title: "Pós Avaliação Positiva",
-            icon: "💫",
-            text: "Obrigado pela excelente avaliação, [nome]! Ficamos muito felizes em saber que sua experiência foi positiva. Continuaremos trabalhando para manter esse nível de qualidade!"
-        },
-        {
-            id: 7,
-            title: "Feedback para Melhorias",
-            icon: "📝",
-            text: "Olá [nome]! Notamos sua avaliação e gostaríamos de entender melhor como podemos melhorar nossos serviços. Poderia nos dar mais detalhes sobre sua experiência?"
-        },
-        {
-            id: 8,
-            title: "Convite para Nova Visita",
-            icon: "🎯",
-            text: "Obrigado por nos avaliar, [nome]! Como agradecimento, preparamos uma condição especial para sua próxima visita. Quando podemos agendar?"
-        }
-    ]
-},
-// PROPOSTA ENVIADA
-{
-    id: "proposta",
-    title: "Proposta Enviada",
-    icon: "👋",
-    sortOrder: 9,
-    messages: [
-        {
-            id: 1,
-            title: "Primeira Mensagem (1-2 dias após a proposta)",
-            icon: "🔥",
-            text: "Oi [nome]! Passando para ver se teve a oportunidade de analisar nossa proposta de aplicação de película. Alguma dúvida sobre os detalhes, benefícios ou garantias? Estamos aqui para ajudar com o que precisar."
-        },
-        {
-            id: 2,
-            title: "Segunda Mensagem (3-5 dias após a proposta)",
-            icon: "🔥",
-            text: "Olá [nome], só para lembrar que as películas oferecidas estão disponíveis com garantia de qualidade e aplicação certificada. Isso significa que você pode contar com a durabilidade e eficácia comprovada do nosso serviço."
-        },
-        {
-            id: 3,
-            title: "Terceira Mensagem (após 7 dias)",
-            icon: "🔥",
-            text: "Oi [nome]! Queremos que você faça a escolha certa para seu projeto. Ficaremos felizes em ajudar com mais informações ou ajustar a proposta conforme suas necessidades. Conte conosco!"
-        }
-    ]
-},
-// CLIENTE FALA DO PREÇO
-{
-    id: "objecao_preco",
-    title: "Justificando Preço",
-    icon: "💰",
-    sortOrder: 19,
-    messages: [
-        {
-            id: 1,
-            title: "Valorização do Investimento",
-            icon: "💎",
-            text: "Compreendo que o investimento é uma consideração importante. Permita-me destacar que nossas películas são de alta qualidade, oferecendo benefícios como durabilidade, eficiência energética e proteção UV, o que proporciona economia a longo prazo."
-        },
-        {
-            id: 2,
-            title: "Aplicação tembem conta",
-            icon: "⚖️",
-            text: "Compreendo perfeitamente, mas você está investindo não apenas na película mas sim em um serviço de aplicação profissional, garantindo que a película desempenhe sua função de forma eficaz. Nossa empresa é reconhecida pela excelência no atendimento e pela satisfação dos clientes, o que justifica o valor do investimento."
-        },
-        {
-            id: 3,
-            title: "Condições de Pagamento",
-            icon: "💳",
-            text: "Olha [nome], para justificar seu investimento, podemos trazer diversas formas de pagamento: parcelamento em até [12x], desconto especial à vista, e até opção de PIX. Qual dessas condições seria mais confortável para você hoje?"
-        },
-        {
-            id: 4,
-            title: "engendecendo nosso serviço",
-            icon: "🎯",
-            text: "Entendemos o valor do investimento, e é justamente por isso que garantimos uma aplicação sem bolhas, sem falhas e com alta durabilidade. Nossos clientes são 100% Satisfeitos e sempre acabam indicando nosso serviço."
-        },
-        {
-            id: 5,
-            title: "Promoção Limitada",
-            icon: "⚡",
-            text: "Sabemos que existem opções mais baratas no mercado. No entanto, nossa empresa se destaca pela excelência no atendimento e pela utilização de materiais de alta qualidade. Nossa equipe é constantemente treinada para oferecer o melhor serviço, o que se reflete nas avaliações positivas de nossos clientes."
-        },
-        {
-            id: 6,
-            title: "Valor Agregado",
-            icon: "✨",
-            text: "Além da película em si, [nome], você recebe: instalação profissional, garantia vitalícia e acompanhamento pós-venda."
-        },
-        {
-            id: 7,
-            title: "Fechamento com Urgência",
-            icon: "🔥",
-            text: "Entendo sua análise de preço, [nome]. Justamente por isso separei uma condição especial para você: além do desconto de [20]%, você ainda leva [bônus/brinde: caneca, caneta, flanela]. Mas preciso da sua resposta hoje. Podemos apertar as mãos?"
-        }
-    ]
-},
-// AGINDO PELO MEDO DE UMA MA APLICAÇÃO
-{
-    id: "medo",
-    title: "Agindo pelo Medo",
-    icon: "⚡",
-    sortOrder: 2,
-    messages: [
-        {
-            id: 1,
-            title: "Risco de Profissionais Inexperientes",
-            icon: "⚡",
-            text: "Sabemos que o mercado está cheio de opções, mas é importante escolher bem. Uma aplicação feita por alguém sem experiência pode resultar em problemas como bolhas, riscos no vidro, e até mesmo danos permanentes nos acabamentos. Aqui, garantimos um serviço impecável, feito por especialistas."
-        },
-        {
-            id: 2,
-            title: "Evite Resultados de Baixa Qualidade",
-            icon: "⚡",
-            text: "Muitos clientes nos procuram após experiências ruins com outras empresas. Imagine se, em vez de uma película impecável, o resultado fosse uma aplicação cheia de bolhas ou um vidro riscado. Investir em qualidade evita transtornos e retrabalho."
-        },
-        {
-            id: 3,
-            title: "Prevenção de Danos e Segurança do Material",
-            icon: "⚡",
-            text: "A aplicação de película exige cuidados técnicos para proteger cada detalhe do ambiente. Profissionais não capacitados podem acabar riscando o vidro, manchando as paredes, ou até danificando a estrutura ao redor. Com a gente, você evita qualquer preocupação: nossa equipe é treinada para garantir um resultado perfeito e seguro."
-        },
-        {
-            id: 4,
-            title: "Garantia de Acabamento Impecável",
-            icon: "⚡",
-            text: "Aplicar películas exige não só técnica, mas também um compromisso com o acabamento e a segurança do espaço do cliente. Ao confiar em profissionais menos preparados, há um risco real de sujeira, marcas permanentes e acabamento mal feito. Aqui, garantimos que cada detalhe será tratado com o máximo cuidado."
-        },
-        {
-            id: 5,
-            title: "Histórias de Clientes que Escolheram Mal e Tiveram Prejuízo",
-            icon: "⚡",
-            text: "Recentemente, um cliente nos procurou após uma experiência ruim com outro aplicador. O resultado foram bolhas e manchas permanentes no vidro, exigindo uma remoção completa e substituição da película. Com nossa experiência e cuidado, garantimos que o trabalho seja impecável desde o início, evitando esse tipo de retrabalho e custo adicional."
-        },
-        {
-            id: 6,
-            title: "Certificações e Treinamento da Equipe",
-            icon: "⚡",
-            text: "Nossa equipe é treinada e certificada para evitar os problemas mais comuns na aplicação de películas, como riscos no vidro e manchas. Contamos com técnicas exclusivas que garantem uma instalação sem qualquer falha ou dano ao ambiente."
-        },
-        {
-            id: 7,
-            title: "Uso de Materiais e Equipamentos de Alta Qualidade",
-            icon: "⚡",
-            text: "Diferente de aplicadores inexperientes que muitas vezes utilizam materiais inadequados, aqui utilizamos apenas películas de alta qualidade e equipamentos especializados que garantem um acabamento perfeito e duradouro. Trabalhar com o melhor é nossa garantia de um resultado superior."
-        },
-        {
-            id: 8,
-            title: "Política de Garantia e Satisfação do Cliente",
-            icon: "⚡",
-            text: "Nosso compromisso é com a sua satisfação completa. Oferecemos uma política de garantia que cobre qualquer eventual problema, o que significa que, com nossa aplicação, você não corre o risco de surpresas desagradáveis como bolhas ou danos."
-        },
-        {
-            id: 9,
-            title: "Comparação com o Mercado",
-            icon: "⚡",
-            text: "O barato muitas vezes sai caro. Aplicadores sem o devido conhecimento podem parecer vantajosos pelo preço, mas o risco de falhas, retrabalhos e até danos ao seu patrimônio é real. Nós investimos em capacitação e materiais de ponta para garantir um serviço impecável."
-        }
-    ]
-}
-          
-            // ... outras categorias e mensagens
-        ];
+    // SAUDAÇÃO
+    {
+        id: "saudacao",
+        title: "Mensagens Saudação",
+        icon: "👋",
+        sortOrder: 1,
+        messages: [
+            {
+                id: "saudacao-1",
+                title: "Boas-vindas Cordial",
+                icon: "😊",
+                text: "Olá! Tudo bem com você? É um prazer contar com sua presença. Estamos aqui para entender suas necessidades e oferecer as melhores soluções em películas. Como podemos ser úteis hoje?"
+            },
+            {
+                id: "saudacao-2",
+                title: "Apresentação Pessoal",
+                icon: "🤝",
+                text: "[nome] falando da [Nome da Empresa]! Tudo bem com Você? Sabemos que cada cliente é único, e estamos prontos para ouvir e atender às suas necessidades. Em que podemos ajudar?"
+            },
+            {
+                id: "saudacao-3",
+                title: "Agradecimento Inicial",
+                icon: "🙏",
+                text: "Agradeço por entrar em contato conosco. Tá tudo bem com você hoje? Quero poder prestar um excelente atendimento. Por favor, compartilhe como podemos ajudar."
+            },
+            {
+                id: "saudacao-4",
+                title: "Boas-vindas Profissional",
+                icon: "💼",
+                text: "Feliz em receber sua mensagem. Sou [nome], pode contar comigo para esclarecer dúvidas e oferecer solução eficaz para você. Como podemos ser úteis hoje?"
+            },
+            {
+                id: "saudacao-5",
+                title: "Atendimento Personalizado",
+                icon: "🌟",
+                text: "Entendemos a importância de um atendimento personalizado e estamos aqui para garantir sua satisfação. Me chamo [nome]. Em que posso ser útil para você hoje?"
+            },
+            {
+                id: "saudacao-6",
+                title: "Saudação com Foco em Soluções",
+                icon: "💫",
+                text: "Olá, sou [Seu Nome], da [Nome da Empresa]. Espero que esteja bem. Como posso ajudar você hoje?"
+            },
+            {
+                id: "saudacao-7",
+                title: "Anti-Vácuo",
+                icon: "✨",
+                text: "Oi [nome], percebi que não obtive retorno. Ainda posso ajudar com informações sobre nossas películas?"
+            },
+            {
+                id: "saudacao-8",
+                title: "Anti-Vácuo agressivo",
+                icon: "⚡",
+                text: "Importante! [nome], não quero que você perca a oportunidade de conhecer nossas soluções em películas. Quando podemos conversar?"
+            },
+            {
+                id: "saudacao-9",
+                title: "Encerramento de tentativa",
+                icon: "🔚",
+                text: "Entendo que talvez agora não seja o momento ideal. Ficarei à disposição quando precisar de informações sobre películas. Tenha um ótimo dia!"
+            }
+        ]
+    },
+    // INDICAÇÃO
+    {
+        id: "indicacao",
+        title: "INDICAÇÃO",
+        icon: "⚡",
+        sortOrder: 2,
+        messages: [
+            {
+                id: "indicacao-1",
+                title: "Abordagem Inicial - Cliente Indicado",
+                icon: "⚡",
+                text: "Oi [nome],\n\nTudo bem? A [nome da pessoa que indicou] me passou o seu contato. Meu nome é Nathan. Ela me indicou seu contato, eu trabalho com transformação de negócio e aumento de faturamento para empreendedores através das redes sociais."
+            }
+            // ... outras mensagens
+        ]
+    },
+    // PERGUNTAS
+    {
+        id: "perguntas",
+        title: "Perguntas Importantes",
+        icon: "❓",
+        sortOrder: 4,
+        messages: [
+            {
+                id: "perguntas-1",
+                title: "Perguntas Vencedoras",
+                icon: "🎯",
+                text: "Qual é o principal motivo que te fez buscar películas neste momento? Isso me ajudará a oferecer a melhor solução para você."
+            },
+            {
+                id: "perguntas-2",
+                title: "Demonstrar interesse e atenção",
+                icon: "👂",
+                text: "Entendi sua necessidade. Me conte mais sobre [aspecto mencionado pelo cliente], assim posso te ajudar de forma mais específica."
+            },
+            {
+                id: "perguntas-3",
+                title: "Interesse no problema do cliente",
+                icon: "🤝",
+                text: "Compreendo sua situação com [problema mencionado]. Já ajudamos muitos clientes com desafios similares. Posso te mostrar algumas soluções?"
+            },
+            {
+                id: "perguntas-4",
+                title: "Cliente Sem Tempo",
+                icon: "⏰",
+                text: "Sei que seu tempo é valioso. Posso te apresentar rapidamente nossas principais soluções em apenas 5 minutos. O que acha?"
+            },
+            {
+                id: "perguntas-5",
+                title: "Mandar Depoimento de Outros Clientes",
+                icon: "⭐",
+                text: "Olha só o que nossos clientes estão falando sobre nossos serviços: [depoimento]. Posso te mostrar mais casos de sucesso similares ao que você procura?"
+            }
+        ]
+    },
+    // ENCANTAMENTO DO CLIENTE
+    {
+        id: "encantamento_cliente",
+        title: "Encanta o cliente",
+        icon: "✨",
+        sortOrder: 5,
+        messages: [
+            {
+                id: "encantamento_cliente-1",
+                title: "Demonstrar interesse e atenção",
+                icon: "🎯",
+                text: "Como está sendo sua experiência até agora? Há algo específico que você gostaria de saber mais a respeito?"
+            },
+            {
+                id: "encantamento_cliente-2",
+                title: "Interesse no problema do cliente",
+                icon: "🤝",
+                text: "Percebo que [situação específica] é importante para você. Posso te explicar como nossas soluções podem ajudar especificamente nesse aspecto?"
+            },
+            {
+                id: "encantamento_cliente-3",
+                title: "Cliente Sem Tempo",
+                icon: "⚡",
+                text: "Vou ser bem objetivo(a) para otimizar seu tempo. Aqui está o que precisa saber: [pontos principais]. Podemos avançar?"
+            },
+            {
+                id: "encantamento_cliente-4",
+                title: "Mandar Depoimento de Outros Clientes",
+                icon: "🌟",
+                text: "Gostaria de compartilhar a experiência de um cliente que tinha uma necessidade parecida com a sua: [depoimento relevante]. O que achou?"
+            },
+            {
+                id: "encantamento_cliente-5",
+                title: "Script Mensagem de Ausência",
+                icon: "📝",
+                text: "Estou temporariamente ausente, mas retorno seu contato em breve para garantir o melhor atendimento possível. Agradeço sua compreensão!"
+            },
+            {
+                id: "encantamento_cliente-6",
+                title: "Feedback de Satisfação",
+                icon: "📊",
+                text: "Como foi sua experiência com nosso serviço até agora? Seu feedback é muito importante para continuarmos melhorando sempre!"
+            }
+        ]
+    },
+    // AGENDAMENTO
+    {
+        id: "agendamento",
+        title: "Agendamento",
+        icon: "📅",
+        sortOrder: 2,
+        messages: [
+            {
+                id: "agendamento-1",
+                title: "Agendar horário",
+                icon: "⏰",
+                text: "Que ótimo que você tem interesse! Temos horários disponíveis para [data]. Qual seria melhor para você?"
+            },
+            {
+                id: "agendamento-2",
+                title: "Cliente desmarcou",
+                icon: "❌",
+                text: "Entendo que imprevistos acontecem! Podemos remarcar para outro horário que seja mais conveniente para você. Que tal [sugestão de nova data]?"
+            },
+            {
+                id: "agendamento-3",
+                title: "Cliente furou",
+                icon: "⚠️",
+                text: "Notei que não conseguimos nos encontrar no horário marcado. Gostaria de remarcar para um horário mais conveniente?"
+            },
+            {
+                id: "agendamento-4",
+                title: "Pós reunião/consulta",
+                icon: "✅",
+                text: "Foi um prazer te atender hoje! Espero que tenha gostado de nossas soluções. Estou à disposição para qualquer dúvida adicional."
+            }
+        ]
+    },
+    // LEMBRETE
+    {
+        id: "lembrete",
+        title: "Lembrete",
+        icon: "🔔",
+        sortOrder: 3,
+        messages: [
+            {
+                id: "lembrete-1",
+                title: "Lembrete de agendamento anti furo",
+                icon: "📝",
+                text: "Olá [nome]! Passando para confirmar nosso horário amanhã às [horário]."
+            },
+            {
+                id: "lembrete-2",
+                title: "Lembrete por dia cliente novo",
+                icon: "🆕",
+                text: "Olá [nome]! Lembrando do nosso compromisso hoje às [horário]. Até mais!"
+            },
+            {
+                id: "lembrete-3",
+                title: "Lembrete agendamento cliente antigo",
+                icon: "👥",
+                text: "Oi [nome]! Só vim confirmar nosso compromisso de hoje às [data/hora]."
+            }
+        ]
+    },
+    // REATIVAÇÃO
+    {
+        id: "reativacao",
+        title: "Reativação contato",
+        icon: "🔄",
+        sortOrder: 6,
+        messages: [
+            {
+                id: "reativacao-1",
+                title: "Cliente que não respondeu há algum tempo",
+                icon: "⏰",
+                text: "Olá [nome]! Faz um tempo que não nos falamos e queria saber como você está. Caso ainda tenha interesse em nossas películas, estou à disposição para ajudar!"
+            },
+            {
+                id: "reativacao-2",
+                title: "Cliente parou de ir",
+                icon: "🔙",
+                text: "Oi [nome], notei que faz um tempo desde sua última visita. Está tudo bem? Temos novidades em películas que podem te interessar. Posso te contar mais sobre?"
+            },
+            {
+                id: "reativacao-3",
+                title: "Cliente pediu orçamento e não respondeu",
+                icon: "💼",
+                text: "Olá [nome]! Lembra do orçamento que fizemos para você? Ainda estou à disposição para esclarecer qualquer dúvida e ajudar você a fazer o melhor investimento em películas."
+            }
+        ]
+    },
+    // PÓS VENDA
+    {
+        id: "pos_venda",
+        title: "Pós venda",
+        icon: "🎯",
+        sortOrder: 7,
+        messages: [
+            {
+                id: "pos_venda-1",
+                title: "Pedir avaliação sobre o produto ou serviço",
+                icon: "⭐",
+                text: "Olá [nome]! Como foi sua experiência com nossas películas? Seu feedback é muito importante para nós. Poderia compartilhar sua opinião? Isso nos ajuda a melhorar sempre!"
+            },
+            {
+                id: "pos_venda-2",
+                title: "Pedir avaliação no Google",
+                icon: "📱",
+                text: "Oi [nome]! Sua opinião é muito valiosa para nós. Se puder, gostaria que compartilhasse sua experiência com nossa empresa no Google. Posso te enviar o link?"
+            },
+            {
+                id: "pos_venda-3",
+                title: "Pedir depoimento em vídeo",
+                icon: "🎥",
+                text: "Oi [nome]! Sua satisfação com nosso serviço nos deixou muito felizes. Gostaria de gravar um breve depoimento em vídeo contando sua experiência? Seria incrível!"
+            },
+            {
+                id: "pos_venda-4",
+                title: "Oferecer brinde para avaliação",
+                icon: "🎁",
+                text: "Olá [nome]! Para agradecer sua confiança em nosso trabalho, gostaríamos de oferecer um brinde especial em troca de sua avaliação sincera. O que acha?"
+            },
+            {
+                id: "pos_venda-5",
+                title: "Acompanhamento pós-instalação",
+                icon: "✅",
+                text: "Oi [nome]! Como está a película que instalamos? Está tudo conforme suas expectativas? Estou à disposição para qualquer ajuste ou dúvida que surgir!"
+            }
+        ]
+    },
+    // AVALIAÇÕES GOOGLE
+    {
+        id: "google_reviews",
+        title: "Avaliações Google",
+        icon: "⭐",
+        sortOrder: 8,
+        messages: [
+            {
+                id: "google_reviews-1",
+                title: "Solicitar Avaliação Simples",
+                icon: "📱",
+                text: "Oi [nome]! Sua opinião é muito importante para nós. Se puder nos avaliar no Google, ficaremos muito gratos! Aqui está o link: [link do Google]"
+            },
+            {
+                id: "google_reviews-2",
+                title: "Pedido Detalhado de Avaliação",
+                icon: "🌟",
+                text: "Olá [nome]! Ficamos muito felizes em te atender. Se possível, poderia compartilhar sua experiência com nossa empresa no Google? Sua avaliação ajuda outros clientes a nos encontrarem. Link: [link do Google]"
+            },
+            {
+                id: "google_reviews-3",
+                title: "Avaliação com Incentivo",
+                icon: "🎁",
+                text: "Oi [nome]! Para agradecer sua confiança, preparamos um desconto especial na sua próxima visita quando você compartilhar sua experiência no Google. Posso te enviar o link?"
+            },
+            {
+                id: "google_reviews-4",
+                title: "Lembrete de Avaliação",
+                icon: "🔔",
+                text: "Olá [nome]! Passando para lembrar sobre a avaliação no Google que conversamos. Sua opinião é fundamental para continuarmos melhorando! Aqui está o link novamente: [link do Google]"
+            },
+            {
+                id: "google_reviews-5",
+                title: "Agradecimento por Avaliar",
+                icon: "🙏",
+                text: "Muito obrigado por nos avaliar no Google, [nome]! Seu feedback é muito valioso e nos ajuda a melhorar sempre. Conte sempre conosco!"
+            },
+            {
+                id: "google_reviews-6",
+                title: "Pós Avaliação Positiva",
+                icon: "💫",
+                text: "Obrigado pela excelente avaliação, [nome]! Ficamos muito felizes em saber que sua experiência foi positiva. Continuaremos trabalhando para manter esse nível de qualidade!"
+            },
+            {
+                id: "google_reviews-7",
+                title: "Feedback para Melhorias",
+                icon: "📝",
+                text: "Olá [nome]! Notamos sua avaliação e gostaríamos de entender melhor como podemos melhorar nossos serviços. Poderia nos dar mais detalhes sobre sua experiência?"
+            },
+            {
+                id: "google_reviews-8",
+                title: "Convite para Nova Visita",
+                icon: "🎯",
+                text: "Obrigado por nos avaliar, [nome]! Como agradecimento, preparamos uma condição especial para sua próxima visita. Quando podemos agendar?"
+            }
+        ]
+    },
+    // PROPOSTA ENVIADA
+    {
+        id: "proposta",
+        title: "Proposta Enviada",
+        icon: "👋",
+        sortOrder: 9,
+        messages: [
+            {
+                id: "proposta-1",
+                title: "Primeira Mensagem (1-2 dias após a proposta)",
+                icon: "🔥",
+                text: "Oi [nome]! Passando para ver se teve a oportunidade de analisar nossa proposta de aplicação de película. Alguma dúvida sobre os detalhes, benefícios ou garantias? Estamos aqui para ajudar com o que precisar."
+            },
+            {
+                id: "proposta-2",
+                title: "Segunda Mensagem (3-5 dias após a proposta)",
+                icon: "🔥",
+                text: "Olá [nome], só para lembrar que as películas oferecidas estão disponíveis com garantia de qualidade e aplicação certificada. Isso significa que você pode contar com a durabilidade e eficácia comprovada do nosso serviço."
+            },
+            {
+                id: "proposta-3",
+                title: "Terceira Mensagem (após 7 dias)",
+                icon: "🔥",
+                text: "Oi [nome]! Queremos que você faça a escolha certa para seu projeto. Ficaremos felizes em ajudar com mais informações ou ajustar a proposta conforme suas necessidades. Conte conosco!"
+            }
+        ]
+    },
+    // CLIENTE FALA DO PREÇO
+    {
+        id: "objecao_preco",
+        title: "Justificando Preço",
+        icon: "💰",
+        sortOrder: 19,
+        messages: [
+            {
+                id: "objecao_preco-1",
+                title: "Valorização do Investimento",
+                icon: "💎",
+                text: "Compreendo que o investimento é uma consideração importante. Permita-me destacar que nossas películas são de alta qualidade, oferecendo benefícios como durabilidade, eficiência energética e proteção UV, o que proporciona economia a longo prazo."
+            },
+            {
+                id: "objecao_preco-2",
+                title: "Aplicação tembem conta",
+                icon: "⚖️",
+                text: "Compreendo perfeitamente, mas você está investindo não apenas na película mas sim em um serviço de aplicação profissional, garantindo que a película desempenhe sua função de forma eficaz. Nossa empresa é reconhecida pela excelência no atendimento e pela satisfação dos clientes, o que justifica o valor do investimento."
+            },
+            {
+                id: "objecao_preco-3",
+                title: "Condições de Pagamento",
+                icon: "💳",
+                text: "Olha [nome], para justificar seu investimento, podemos trazer diversas formas de pagamento: parcelamento em até [12x], desconto especial à vista, e até opção de PIX. Qual dessas condições seria mais confortável para você hoje?"
+            },
+            {
+                id: "objecao_preco-4",
+                title: "engendecendo nosso serviço",
+                icon: "🎯",
+                text: "Entendemos o valor do investimento, e é justamente por isso que garantimos uma aplicação sem bolhas, sem falhas e com alta durabilidade. Nossos clientes são 100% Satisfeitos e sempre acabam indicando nosso serviço."
+            },
+            {
+                id: "objecao_preco-5",
+                title: "Promoção Limitada",
+                icon: "⚡",
+                text: "Sabemos que existem opções mais baratas no mercado. No entanto, nossa empresa se destaca pela excelência no atendimento e pela utilização de materiais de alta qualidade. Nossa equipe é constantemente treinada para oferecer o melhor serviço, o que se reflete nas avaliações positivas de nossos clientes."
+            },
+            {
+                id: "objecao_preco-6",
+                title: "Valor Agregado",
+                icon: "✨",
+                text: "Além da película em si, [nome], você recebe: instalação profissional, garantia vitalícia e acompanhamento pós-venda."
+            },
+            {
+                id: "objecao_preco-7",
+                title: "Fechamento com Urgência",
+                icon: "🔥",
+                text: "Entendo sua análise de preço, [nome]. Justamente por isso separei uma condição especial para você: além do desconto de [20]%, você ainda leva [bônus/brinde: caneca, caneta, flanela]. Mas preciso da sua resposta hoje. Podemos apertar as mãos?"
+            }
+        ]
+    },
+    // AGINDO PELO MEDO DE UMA MA APLICAÇÃO
+    {
+        id: "medo",
+        title: "Agindo pelo Medo",
+        icon: "⚡",
+        sortOrder: 2,
+        messages: [
+            {
+                id: "medo-1",
+                title: "Risco de Profissionais Inexperientes",
+                icon: "⚡",
+                text: "Sabemos que o mercado está cheio de opções, mas é importante escolher bem. Uma aplicação feita por alguém sem experiência pode resultar em problemas como bolhas, riscos no vidro, e até mesmo danos permanentes nos acabamentos. Aqui, garantimos um serviço impecável, feito por especialistas."
+            },
+            {
+                id: "medo-2",
+                title: "Evite Resultados de Baixa Qualidade",
+                icon: "⚡",
+                text: "Muitos clientes nos procuram após experiências ruins com outras empresas. Imagine se, em vez de uma película impecável, o resultado fosse uma aplicação cheia de bolhas ou um vidro riscado. Investir em qualidade evita transtornos e retrabalho."
+            },
+            {
+                id: "medo-3",
+                title: "Prevenção de Danos e Segurança do Material",
+                icon: "⚡",
+                text: "A aplicação de película exige cuidados técnicos para proteger cada detalhe do ambiente. Profissionais não capacitados podem acabar riscando o vidro, manchando as paredes, ou até danificando a estrutura ao redor. Com a gente, você evita qualquer preocupação: nossa equipe é treinada para garantir um resultado perfeito e seguro."
+            },
+            {
+                id: "medo-4",
+                title: "Garantia de Acabamento Impecável",
+                icon: "⚡",
+                text: "Aplicar películas exige não só técnica, mas também um compromisso com o acabamento e a segurança do espaço do cliente. Ao confiar em profissionais menos preparados, há um risco real de sujeira, marcas permanentes e acabamento mal feito. Aqui, garantimos que cada detalhe será tratado com o máximo cuidado."
+            },
+            {
+                id: "medo-5",
+                title: "Histórias de Clientes que Escolheram Mal e Tiveram Prejuízo",
+                icon: "⚡",
+                text: "Recentemente, um cliente nos procurou após uma experiência ruim com outro aplicador. O resultado foram bolhas e manchas permanentes no vidro, exigindo uma remoção completa e substituição da película. Com nossa experiência e cuidado, garantimos que o trabalho seja impecável desde o início, evitando esse tipo de retrabalho e custo adicional."
+            },
+            {
+                id: "medo-6",
+                title: "Certificações e Treinamento da Equipe",
+                icon: "⚡",
+                text: "Nossa equipe é treinada e certificada para evitar os problemas mais comuns na aplicação de películas, como riscos no vidro e manchas. Contamos com técnicas exclusivas que garantem uma instalação sem qualquer falha ou dano ao ambiente."
+            },
+            {
+                id: "medo-7",
+                title: "Uso de Materiais e Equipamentos de Alta Qualidade",
+                icon: "⚡",
+                text: "Diferente de aplicadores inexperientes que muitas vezes utilizam materiais inadequados, aqui utilizamos apenas películas de alta qualidade e equipamentos especializados que garantem um acabamento perfeito e duradouro. Trabalhar com o melhor é nossa garantia de um resultado superior."
+            },
+            {
+                id: "medo-8",
+                title: "Política de Garantia e Satisfação do Cliente",
+                icon: "⚡",
+                text: "Nosso compromisso é com a sua satisfação completa. Oferecemos uma política de garantia que cobre qualquer eventual problema, o que significa que, com nossa aplicação, você não corre o risco de surpresas desagradáveis como bolhas ou danos."
+            },
+            {
+                id: "medo-9",
+                title: "Comparação com o Mercado",
+                icon: "⚡",
+                text: "O barato muitas vezes sai caro. Aplicadores sem o devido conhecimento podem parecer vantajosos pelo preço, mas o risco de falhas, retrabalhos e até danos ao seu patrimônio é real. Nós investimos em capacitação e materiais de ponta para garantir um serviço impecável."
+            }
+        ]
+    }
+];
+
 
         function App() {
             // Estados
             const [categories, setCategories] = React.useState([]);
-            const [selectedCategory, setSelectedCategory] = React.useState(null);
+            const [selectedCategory, setSelectedCategory] = React.useState('all'); // 'all' para "Todas as Mensagens", 'fixadas' para "Fixadas", ou objeto de categoria
             const [searchTerm, setSearchTerm] = React.useState('');
             const [filteredMessages, setFilteredMessages] = React.useState([]);
             const [modalVisible, setModalVisible] = React.useState(false);
             const [modalMessage, setModalMessage] = React.useState(null);
             const [toastMessage, setToastMessage] = React.useState('');
-            const [pinnedMessages, setPinnedMessages] = React.useState([]);
+            const [globalPinnedMessages, setGlobalPinnedMessages] = React.useState([]);
 
-            // Novos estados para o nome e telefone do cliente
+            // Estados para o nome e telefone do cliente
             const [clientName, setClientName] = React.useState('');
             const [clientPhone, setClientPhone] = React.useState('');
 
@@ -1104,13 +1101,13 @@
                     setCategories(categoriesData);
                 }
 
-                // Carregar mensagens fixadas
-                const savedPinnedMessages = JSON.parse(localStorage.getItem('pinnedMessages')) || [];
-                setPinnedMessages(savedPinnedMessages);
+                // Carregar mensagens fixadas globalmente
+                const savedGlobalPinned = JSON.parse(localStorage.getItem('globalPinnedMessages')) || [];
+                setGlobalPinnedMessages(savedGlobalPinned);
 
                 // Carregar dados do cliente
                 const savedClientName = localStorage.getItem('clientName') || '';
-                const savedClientPhone = localStorage.getItem('clientPhone') || '(83) 99647-6052';
+                const savedClientPhone = localStorage.getItem('clientPhone') || ''; // Removido o número padrão
                 setClientName(savedClientName);
                 setClientPhone(savedClientPhone);
             }, []);
@@ -1118,22 +1115,36 @@
             // Atualizar mensagens filtradas
             React.useEffect(() => {
                 filterMessages();
-            }, [categories, selectedCategory, searchTerm]);
+            }, [categories, selectedCategory, searchTerm, globalPinnedMessages]);
 
-            // Atualizar localStorage sempre que categories mudar
+            // Atualizar localStorage sempre que categories ou fixadas mudarem
             React.useEffect(() => {
                 localStorage.setItem('categoriesData', JSON.stringify(categories));
             }, [categories]);
 
+            React.useEffect(() => {
+                localStorage.setItem('globalPinnedMessages', JSON.stringify(globalPinnedMessages));
+            }, [globalPinnedMessages]);
+
             // Filtrar mensagens
             const filterMessages = () => {
                 let messages = [];
-                if (selectedCategory) {
-                    messages = selectedCategory.messages;
-                } else {
-                    categories.forEach(cat => {
-                        messages = messages.concat(cat.messages);
-                    });
+                if (selectedCategory === "fixadas") {
+                    // Mostrar apenas mensagens fixadas globalmente
+                    messages = globalPinnedMessages;
+                } else if (selectedCategory === "all") {
+                    // Mostrar todas as mensagens com as fixadas globais no topo
+                    const allMessages = categories.flatMap(cat => cat.messages);
+                    const nonPinnedMessages = allMessages.filter(msg => !globalPinnedMessages.some(pinned => pinned.id === msg.id));
+                    messages = [...globalPinnedMessages, ...nonPinnedMessages];
+                } else if (selectedCategory) {
+                    // Mostrar mensagens de uma categoria específica com as fixadas no topo
+                    const category = categories.find(cat => cat.id === selectedCategory.id);
+                    if (category) {
+                        const pinnedInCategory = category.messages.filter(msg => globalPinnedMessages.some(pinned => pinned.id === msg.id));
+                        const nonPinnedInCategory = category.messages.filter(msg => !globalPinnedMessages.some(pinned => pinned.id === msg.id));
+                        messages = [...pinnedInCategory, ...nonPinnedInCategory];
+                    }
                 }
 
                 if (searchTerm) {
@@ -1148,7 +1159,13 @@
 
             // Selecionar categoria
             const handleCategorySelect = (category) => {
-                setSelectedCategory(category);
+                if (category === "all") {
+                    setSelectedCategory("all");
+                } else if (category === "fixadas") {
+                    setSelectedCategory("fixadas");
+                } else {
+                    setSelectedCategory(category);
+                }
                 setSearchTerm('');
             };
 
@@ -1204,6 +1221,23 @@
                 localStorage.setItem('clientPhone', phone);
             };
 
+            // Função para tratar a colagem no campo de telefone
+            const handlePhonePaste = (e) => {
+                e.preventDefault();
+                const paste = e.clipboardData.getData('text');
+                let digits = paste.replace(/\D/g, '');
+
+                // Remover o código do país '55' se presente
+                if (digits.startsWith('55')) {
+                    digits = digits.slice(2);
+                }
+
+                // Formatar o telefone
+                const formattedPhone = formatPhoneNumber(digits);
+                setClientPhone(formattedPhone);
+                localStorage.setItem('clientPhone', formattedPhone);
+            };
+
             // Copiar mensagem
             const copyMessage = (text) => {
                 const personalizedText = personalizeMessage(text);
@@ -1242,17 +1276,16 @@
                 });
                 setCategories(updatedCategories);
 
-                // Atualizar mensagens fixadas, se necessário
-                const isPinned = pinnedMessages.some(msg => msg.id === modalMessage.id);
-                if (isPinned) {
-                    const updatedPinnedMessages = pinnedMessages.map(msg => {
+                // Atualizar mensagens fixadas globalmente, se necessário
+                const isGlobalPinned = globalPinnedMessages.some(msg => msg.id === modalMessage.id);
+                if (isGlobalPinned) {
+                    const updatedGlobalPinned = globalPinnedMessages.map(msg => {
                         if (msg.id === modalMessage.id) {
                             return { ...modalMessage };
                         }
                         return msg;
                     });
-                    setPinnedMessages(updatedPinnedMessages);
-                    localStorage.setItem('pinnedMessages', JSON.stringify(updatedPinnedMessages));
+                    setGlobalPinnedMessages(updatedGlobalPinned);
                 }
 
                 // Salvar as categorias atualizadas no localStorage
@@ -1275,28 +1308,33 @@
 
             // Fixar ou desafixar mensagem
             const togglePinMessage = (message) => {
-                let updatedPinnedMessages = [];
-                if (pinnedMessages.some(msg => msg.id === message.id)) {
-                    updatedPinnedMessages = pinnedMessages.filter(msg => msg.id !== message.id);
-                    showToast('Mensagem desafixada!');
+                let updatedGlobalPinned = [];
+                if (globalPinnedMessages.some(msg => msg.id === message.id)) {
+                    // Desafixar
+                    updatedGlobalPinned = globalPinnedMessages.filter(msg => msg.id !== message.id);
+                    showToast('Mensagem desafixada globalmente!');
                 } else {
-                    updatedPinnedMessages = [...pinnedMessages, message];
-                    showToast('Mensagem fixada!');
+                    // Fixar
+                    updatedGlobalPinned = [message, ...globalPinnedMessages];
+                    showToast('Mensagem fixada globalmente!');
                 }
-                setPinnedMessages(updatedPinnedMessages);
-                localStorage.setItem('pinnedMessages', JSON.stringify(updatedPinnedMessages));
+                setGlobalPinnedMessages(updatedGlobalPinned);
             };
 
             // Renderizar categorias na sidebar e no menu mobile
             React.useEffect(() => {
                 renderCategories();
-            }, [categories]);
+            }, [categories, globalPinnedMessages]);
 
             const renderCategories = () => {
-                const categoryList = categories.map(category => (
+                // Definir as categorias ordenadas
+                const sortedCategories = [...categories].sort((a, b) => a.sortOrder - b.sortOrder);
+
+                const categoryList = sortedCategories.map(category => (
                     <li key={category.id}>
                         <a href="#" onClick={() => handleCategorySelect(category)}>
-                            {category.title}
+                            <span className="category-title">{category.title}</span>
+                            {/* Indicador de fixação (opcional) */}
                         </a>
                     </li>
                 ));
@@ -1305,7 +1343,10 @@
                 ReactDOM.render(
                     <ul className="category-list">
                         <li>
-                            <a href="#" onClick={() => handleCategorySelect(null)}>Todas as Mensagens</a>
+                            <a href="#" onClick={() => handleCategorySelect("all")}>Todas as Mensagens</a>
+                        </li>
+                        <li>
+                            <a href="#" onClick={() => handleCategorySelect("fixadas")}>Fixadas</a>
                         </li>
                         {categoryList}
                     </ul>,
@@ -1316,7 +1357,10 @@
                 ReactDOM.render(
                     <ul>
                         <li>
-                            <a href="#" onClick={() => handleCategorySelect(null)}>Todas</a>
+                            <a href="#" onClick={() => handleCategorySelect("all")}>Todas</a>
+                        </li>
+                        <li>
+                            <a href="#" onClick={() => handleCategorySelect("fixadas")}>Fixadas</a>
                         </li>
                         {categoryList}
                     </ul>,
@@ -1327,7 +1371,7 @@
             return (
                 <>
                     {/* Campo de Busca */}
-                    <div className="search-bar" style={{ marginBottom: '20px' }}>
+                    <div className="search-bar">
                         <input
                             type="text"
                             placeholder="Buscar mensagens..."
@@ -1356,52 +1400,25 @@
                                 id="clientPhone"
                                 value={clientPhone}
                                 onChange={handleClientPhoneChange}
-                                placeholder="(83) 99647-6052"
+                                onPaste={handlePhonePaste} // Adicionado o handler de colagem
+                                placeholder="" // Atualizado o placeholder
                             />
                         </div>
                     </div>
 
-                    {/* Mensagens Fixadas */}
-                    {pinnedMessages.length > 0 && (
-                        <div>
-                            <h4>Mensagens Fixadas</h4>
-                            <div className="message-list">
-                                {pinnedMessages.map(message => (
-                                    <div className="message-card fade-in" key={message.id}>
-                                        <button className="pin-button" onClick={() => togglePinMessage(message)}>
-                                            <i className="fas fa-star"></i>
-                                        </button>
-                                        <div className="message-header">
-                                            <span className="icon">{message.icon}</span>
-                                            <h5>{message.title}</h5>
-                                        </div>
-                                        <div className="message-body">
-                                            {personalizeMessage(message.text)}
-                                        </div>
-                                        <div className="action-buttons">
-                                            <button className="btn-copy" onClick={() => copyMessage(message.text)}>
-                                                <i className="fas fa-copy"></i> Copiar
-                                            </button>
-                                            <button className="btn-whatsapp" onClick={() => sendWhatsApp(message.text)}>
-                                                <i className="fab fa-whatsapp"></i> WhatsApp
-                                            </button>
-                                            <button className="btn-edit" onClick={() => openEditModal(message)}>
-                                                <i className="fas fa-edit"></i> Editar
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                    {/* Título das Mensagens */}
+                    <h4>
+                        {selectedCategory === "fixadas" ? 'Mensagens Fixadas' :
+                        (selectedCategory === "all" ? 'Todas as Mensagens' :
+                        (selectedCategory ? selectedCategory.title : 'Todas as Mensagens'))}
+                    </h4>
 
                     {/* Lista de Mensagens */}
-                    <h4>{selectedCategory ? selectedCategory.title : 'Todas as Mensagens'}</h4>
                     <div className="message-list">
                         {filteredMessages.map(message => (
                             <div className="message-card fade-in" key={message.id}>
                                 <button className="pin-button" onClick={() => togglePinMessage(message)}>
-                                    <i className={pinnedMessages.some(msg => msg.id === message.id) ? 'fas fa-star' : 'far fa-star'}></i>
+                                    <i className={globalPinnedMessages.some(msg => msg.id === message.id) ? 'fas fa-star' : 'far fa-star'}></i>
                                 </button>
                                 <div className="message-header">
                                     <span className="icon">{message.icon}</span>
@@ -1459,9 +1476,6 @@
                 mobileMenu.style.display = 'block';
             }
         });
-
-
-
     </script>
 </body>
 </html>
