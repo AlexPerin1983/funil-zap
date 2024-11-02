@@ -1,0 +1,21 @@
+{
+    "short_name": "ZapFilm-Pro",
+    "name": "Aplicação Profissional de Mensagens ZapFilm-Pro",
+    "icons": [
+        {
+            "src": "icons/icon-192x192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "icons/icon-512x512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "https://alexperin1983.github.io/funil-zap/",
+    "background_color": "#f4f6f9",
+    "theme_color": "#007bff",
+    "display": "standalone",
+    "orientation": "portrait-primary"
+}
