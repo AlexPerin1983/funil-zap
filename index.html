@@ -567,23 +567,24 @@
 
 
 
+ <!-- Registro do Service Worker -->
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('sw.js').then(function(registration) {
+                console.log('ServiceWorker registrado com sucesso:', registration.scope);
+            }, function(err) {
+                console.log('Falha ao registrar o ServiceWorker:', err);
+            });
+        });
+    }
+</script>
 
 
     <!-- Script Personalizado -->
     <script type="text/babel">
         
-                 //Registro do Service Worker
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('sw.js').then(function(registration) {
-                    console.log('ServiceWorker registrado com sucesso:', registration.scope);
-                }, function(err) {
-                    console.log('Falha ao registrar o ServiceWorker:', err);
-                });
-            });
-        }
-
+   
         // Simulação de dados (Categorias e Mensagens)
         const categoriesData = [
           
