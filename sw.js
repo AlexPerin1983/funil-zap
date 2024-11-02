@@ -3,8 +3,8 @@ const urlsToCache = [
     '/',
     '/index.html',
     '/manifest.json',
-    '/icons/icon-zap192.png',
-    '/icons/icon-zap512.png',
+    '/icons/icon-icon-zap192.png',
+    '/icons/icon-icon-zap512.png',
     // Adicione aqui todos os recursos que deseja cachear
     'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css',
